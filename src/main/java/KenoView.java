@@ -69,16 +69,21 @@ public class KenoView {
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);
-
-        // Exit : returns to welcome scene
+        // Continue
+        Button continueButton = new Button("Continue");
+        continueButton.setOnAction(event -> {
+            this.controller.handleSubmit();
+        } );
+;        // Exit : returns to welcome scene
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(event -> {
             this.controller.handleWelcomeScene();
-        });
+        } );
 
         // Setting the BorderPane
         root.setLeft(exitButton);
         root.setCenter(grid);
+        root.setTop(continueButton);
 
         // TESTING BUTTON ONLY
         Button arrayTest = new Button("arrayTest");
@@ -86,7 +91,7 @@ public class KenoView {
             this.controller.showList();
         });
 
-        root.setRight(arrayTest);
+        //root.setRight(arrayTest);
 
         // building the grid with 80 buttons
         int rows = 8;

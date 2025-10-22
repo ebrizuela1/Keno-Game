@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class KenoController {
     private KenoView view;
@@ -37,4 +38,9 @@ public class KenoController {
     }
 
 
+    public void handleSubmit() {
+        this.model.sumbitKenoTicket();
+
+
+    }
 }

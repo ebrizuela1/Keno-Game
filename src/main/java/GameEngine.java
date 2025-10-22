@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+// Model Layer
 public class GameEngine {
     Player user;
     private ArrayList<Integer> winningNumbers;
@@ -21,8 +22,21 @@ public class GameEngine {
         return commonNumbers.size();
     }
 
+    void sumbitKenoTicket(){
+        this.setWinningNumbers();
+        int totalWinningNumbers = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
+        if (totalWinningNumbers != 0) {
+            System.out.println("YOU WON: " + totalWinningNumbers + "matches");
+        } else {
+            System.out.println("Loser");
+        }
+        System.out.println("User List : " + this.user.getSelectedNumbers());
+        System.out.println("Winning List : " + this.winningNumbers);
+    }
+
     // Generates and returns a winningNumbers array of size numSpots
-    void setWinningNumbers(Integer numSpots){
+    void setWinningNumbers(){
+        int numSpots = this.user.getNumSpots();
         ArrayList<Integer> winning = new ArrayList<>();
         Random randNum = new Random();
 
@@ -38,11 +52,12 @@ public class GameEngine {
     }
 
     ArrayList<Integer> getWinningNumbers(){
-        return this.winningNumbers;
+        // Return a copy since ArrayList is a mutatable object
+        return new ArrayList<Integer>(winningNumbers);
     }
 
-    void userList(){
-        System.out.println(this.user.getSelectedNumbers());
+    ArrayList<Integer> userList(){
+        return this.user.getSelectedNumbers();
     }
 
     public Player getUser() {
