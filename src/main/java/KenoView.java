@@ -1,26 +1,21 @@
-
-
-import javafx.application.Application;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
-public class KenoView extends Application {
+public class KenoView {
 
-    private Stage primaryStage;
     private KenoController controller;
-    private Scene welcomeScene;
-    private Scene menuScene;
-    private Scene gameScene;
+
+    void setController(KenoController controller){
+        this.controller = controller;
+    }
 
     // Builds the welcome scene Keno, Menu
     Scene buildWelcomeScene(){
-
         // Initialize the root of scene
         BorderPane root = new BorderPane();
 
@@ -47,7 +42,6 @@ public class KenoView extends Application {
 
         return new Scene(root, 500, 500);
     }
-
     // Builds the Menu
     Scene buildMenuScene(){
         BorderPane root = new BorderPane();
@@ -67,7 +61,6 @@ public class KenoView extends Application {
         menuOptions.setAlignment(Pos.CENTER);
         return (new Scene(root, 500, 500));
     }
-
     // Builds the Actual Game
     Scene buildGameScene(){
         BorderPane root = new BorderPane();
@@ -112,44 +105,5 @@ public class KenoView extends Application {
             }
         }
         return (new Scene(root, 700, 500));
-    }
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		launch(args);
-	}
-
-
-	//feel free to remove the starter code from this method
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
-        this.welcomeScene = this.buildWelcomeScene();
-        this.menuScene = this.buildMenuScene();
-        this.gameScene = this.buildGameScene();
-
-        Player user = new Player();
-        // Tie the view to the controller
-        this.controller = new KenoController(this, user);
-        //Set Scene
-        primaryStage.setScene(welcomeScene);
-
-        //Set Title
-        primaryStage.setTitle("Keno App");
-        // Display output
-        primaryStage.show();
-    }
-
-    // A method that Controller will Call
-    public void switchToMenu(){
-        primaryStage.setScene(menuScene);
-    }
-
-    public void switchToWelcome(){
-        primaryStage.setScene(welcomeScene);
-    }
-
-    public void switchToGame(){
-        primaryStage.setScene(gameScene);
     }
 }

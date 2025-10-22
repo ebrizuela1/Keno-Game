@@ -1,19 +1,21 @@
 
 public class KenoController {
     private KenoView view;
-    private Player user;
-    KenoController(KenoView view, Player user){
+    private GameEngine model;
+    private MainApp main;
+    KenoController(KenoView view, GameEngine model, MainApp main){
         this.view = view;
-        this.user = user;
+        this.model = model;
+        this.main = main;
     }
     void handleMenuScene(){
-        this.view.switchToMenu();
+        this.main.switchToMenu();
     }
     void handleWelcomeScene(){
-        this.view.switchToWelcome();
+        this.main.switchToWelcome();
     }
     void handleGameScene(){
-        this.view.switchToGame();
+        this.main.switchToGame();
     }
 
     // Need to implement selectedNumber.size() <= numSpots
@@ -21,15 +23,18 @@ public class KenoController {
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
-        if(user.getSelectedNumbers().contains(buttonNum)){
-            this.user.removeNum(buttonNum);
+        if(model.getUser().getSelectedNumbers().contains(buttonNum)){
+            this.model.getUser().removeNum(buttonNum);
         }else{
-            this.user.addNum(buttonNum);
+            this.model.getUser().addNum(buttonNum);
         }
 
     }
 
     public void showList() {
-        System.out.println(this.user.getSelectedNumbers());
+        // Call the Game engine method to show user numList
+        this.model.userList();
     }
+
+
 }

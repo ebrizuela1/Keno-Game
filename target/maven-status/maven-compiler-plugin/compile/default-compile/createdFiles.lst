@@ -1,3 +1,5 @@
-KenoController.class
+GameEngine.class
 KenoView.class
+MainApp.class
+KenoController.class
 Player.class

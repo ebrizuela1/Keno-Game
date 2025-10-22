@@ -4,7 +4,10 @@ public class Player {
     Integer numDrawings;
     Integer numSpots;
     private ArrayList<Integer> selectedNumbers;
+
     Player(){
+        this.numDrawings = 0;
+        this.numSpots = 0;
         this.selectedNumbers = new ArrayList<>();
     }
 
