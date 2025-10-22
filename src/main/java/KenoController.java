@@ -15,12 +15,21 @@ public class KenoController {
     void handleGameScene(){
         this.view.switchToGame();
     }
-    //
+
+    // Need to implement selectedNumber.size() <= numSpots
     public void handleNumberSelection(Integer buttonNum) {
-        this.user.appendNum(buttonNum);
+        // Check if the number exits in selectedNums
+        // -- If it does, we remove the number from selectedNumbers
+        // -- Else add the number to the selectedNumbers
+        if(user.getSelectedNumbers().contains(buttonNum)){
+            this.user.removeNum(buttonNum);
+        }else{
+            this.user.addNum(buttonNum);
+        }
+
     }
 
     public void showList() {
-        System.out.println(this.user.selectedNumbers);
+        System.out.println(this.user.getSelectedNumbers());
     }
 }

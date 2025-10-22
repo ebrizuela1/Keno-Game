@@ -3,11 +3,22 @@ import java.util.ArrayList;
 public class Player {
     Integer numDrawings;
     Integer numSpots;
-    ArrayList<Integer> selectedNumbers;
+    private ArrayList<Integer> selectedNumbers;
     Player(){
         this.selectedNumbers = new ArrayList<>();
     }
-    void appendNum(Integer num){
+
+    // Array getter
+    ArrayList<Integer> getSelectedNumbers(){
+        return this.selectedNumbers;
+    }
+
+    void addNum(Integer num){
         this.selectedNumbers.add(num);
     }
+
+    public void removeNum(Integer num) {
+        this.selectedNumbers.remove(num);
+    }
+
 }
