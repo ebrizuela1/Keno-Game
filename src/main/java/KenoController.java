@@ -10,4 +10,7 @@ public class KenoController {
     void handleWelcomeScene(){
         this.view.switchToWelcome();
     }
+    void handleGameScene(){
+        this.view.switchToGame();
+    }
 }
