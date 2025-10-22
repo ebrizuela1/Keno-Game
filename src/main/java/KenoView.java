@@ -82,18 +82,36 @@ public class KenoView extends Application {
         exitButton.setOnAction(event -> {
             this.controller.handleWelcomeScene();
         });
+
+        // Setting the BorderPane
         root.setLeft(exitButton);
         root.setCenter(grid);
+
+        // TESTING BUTTON ONLY
+        Button arrayTest = new Button("arrayTest");
+        arrayTest.setOnAction(event -> {
+            this.controller.showList();
+        });
+
+        root.setRight(arrayTest);
+
+        // building the grid with 80 buttons
         int rows = 8;
         int cols = 10;
         for (int row = 0 ; row < rows ; row++){
             for (int col = 0 ; col < cols ; col++){
                 String num = Integer.toString( row * cols + col + 1);
                 Button button = new Button(num);
+                button.setOnAction(event -> {
+                    // Get the button number
+                    Integer buttonNum = Integer.parseInt(button.getText());
+                    // Call handler when button is pressed
+                    this.controller.handleNumberSelection(buttonNum);
+                });
                 grid.add(button, col , row);
             }
         }
-        return (new Scene(root, 500, 500));
+        return (new Scene(root, 700, 500));
     }
 
 	public static void main(String[] args) {
@@ -110,8 +128,9 @@ public class KenoView extends Application {
         this.menuScene = this.buildMenuScene();
         this.gameScene = this.buildGameScene();
 
+        Player user = new Player();
         // Tie the view to the controller
-        this.controller = new KenoController(this);
+        this.controller = new KenoController(this, user);
         //Set Scene
         primaryStage.setScene(welcomeScene);
 
