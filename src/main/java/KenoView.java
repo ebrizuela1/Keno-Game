@@ -6,6 +6,8 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+
 public class KenoView {
 
     private KenoController controller;
@@ -80,16 +82,20 @@ public class KenoView {
             this.controller.handleWelcomeScene();
         } );
 
+        // Number of spots : 1, 4, 8, 10
+        Integer[] nums = {1,4,8,10};
+        ComboBox<Integer> numSpotSelection = new ComboBox<>();
+        numSpotSelection.getItems().setAll(nums);
+
+        // Event Handler that sets user : numSpots
+        numSpotSelection.setOnAction(event-> {
+            this.controller.handleNumSpots(numSpotSelection.getValue());
+        } );
         // Setting the BorderPane
         root.setLeft(exitButton);
         root.setCenter(grid);
         root.setTop(continueButton);
-
-        // TESTING BUTTON ONLY
-        Button arrayTest = new Button("arrayTest");
-        arrayTest.setOnAction(event -> {
-            this.controller.showList();
-        });
+        root.setRight(numSpotSelection);
 
         //root.setRight(arrayTest);
 

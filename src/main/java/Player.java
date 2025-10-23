@@ -18,7 +18,8 @@ public class Player {
     }
     void setNumSpots(int newNum){this.numSpots = newNum;}
     void setNumDrawings(int newNum){this.numDrawings = newNum;}
-    // Array getter
+
+    // Array getter : returns copy
     ArrayList<Integer> getSelectedNumbers(){
         return new ArrayList<Integer>(this.selectedNumbers);
 

@@ -24,23 +24,27 @@ public class KenoController {
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
-        if(model.getUser().getSelectedNumbers().contains(buttonNum)){
-            this.model.getUser().removeNum(buttonNum);
+        if(this.model.getUserList().contains(buttonNum)){
+            this.model.removeNumFromUser(buttonNum);
         }else{
-            this.model.getUser().addNum(buttonNum);
+            this.model.addNumFromUser(buttonNum);
         }
 
     }
 
     public void showList() {
         // Call the Game engine method to show user numList
-        this.model.userList();
+        this.model.getUserList();
     }
 
 
     public void handleSubmit() {
-        this.model.sumbitKenoTicket();
+        this.model.submitKenoTicket();
 
 
+    }
+
+    public void handleNumSpots(Integer value) {
+        this.model.setUserNumSpots(value);
     }
 }

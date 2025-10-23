@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class GameEngine {
         return commonNumbers.size();
     }
 
-    void sumbitKenoTicket(){
+    void submitKenoTicket(){
         this.setWinningNumbers();
         int totalWinningNumbers = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
         if (totalWinningNumbers != 0) {
@@ -56,11 +57,21 @@ public class GameEngine {
         return new ArrayList<Integer>(winningNumbers);
     }
 
-    ArrayList<Integer> userList(){
+
+    public ArrayList<Integer> getUserList() {
         return this.user.getSelectedNumbers();
     }
 
-    public Player getUser() {
-        return this.user;
+    public void removeNumFromUser(Integer buttonNum) {
+        // Add the user method removeNum with buttonNum
+        this.user.removeNum(buttonNum);
+    }
+
+    public void addNumFromUser(Integer buttonNum) {
+        this.user.addNum(buttonNum);
+    }
+
+    public void setUserNumSpots(Integer value) {
+        this.user.setNumSpots(value);
     }
 }
