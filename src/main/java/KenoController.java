@@ -28,12 +28,12 @@ public class KenoController{
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
-        if(this.model.getUser().getSelectedNumbers().contains(buttonNum)){
-            this.model.getUser().removeNum(buttonNum);
+        if(this.model.getUserList().contains(buttonNum)){
+            this.model.removeNumFromUser(buttonNum);
             button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
                     "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
-        }else if (this.model.getUser().getSelectedNumbers().size() < this.model.getUser().getNumSpots()){
-            this.model.getUser().addNum(buttonNum);
+        }else if (this.model.getUserList().size() < this.model.getUserNumSpots()){
+            this.model.addNumFromUser(buttonNum);
             button.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
                     "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
         }
@@ -41,12 +41,12 @@ public class KenoController{
 
     public void showList() {
         // Call the Game engine method to show user numList
-        this.model.userList();
+        this.model.getUserList();
     }
 
 
     public void handleSubmit() {
-        this.model.sumbitKenoTicket();
+        this.model.submitKenoTicket();
 
 
     }

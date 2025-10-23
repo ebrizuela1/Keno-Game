@@ -74,4 +74,8 @@ public class GameEngine {
     public void setUserNumSpots(Integer value) {
         this.user.setNumSpots(value);
     }
+
+    public int getUserNumSpots(){
+        return this.user.getNumSpots();
+    }
 }
