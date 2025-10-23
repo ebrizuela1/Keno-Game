@@ -22,7 +22,6 @@ public class Player {
     // Array getter : returns copy
     ArrayList<Integer> getSelectedNumbers(){
         return new ArrayList<Integer>(this.selectedNumbers);
-
     }
 
     void addNum(Integer num){
