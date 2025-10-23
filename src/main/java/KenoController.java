@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 
-public class KenoController {
-    private KenoView view;
-    private GameEngine model;
-    private MainApp main;
+
+public class KenoController{
+    KenoView view;
+    GameEngine model;
+    MainApp main;
+
     KenoController(KenoView view, GameEngine model, MainApp main){
         this.view = view;
         this.model = model;
@@ -24,12 +26,12 @@ public class KenoController {
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
-        if(model.getUser().getSelectedNumbers().contains(buttonNum)){
+        if(this.model.getUser().getSelectedNumbers().contains(buttonNum)){
             this.model.getUser().removeNum(buttonNum);
-        }else{
+
+        }else if (this.model.getUser().getSelectedNumbers().size() < this.model.getUser().getNumSpots()){
             this.model.getUser().addNum(buttonNum);
         }
-
     }
 
     public void showList() {

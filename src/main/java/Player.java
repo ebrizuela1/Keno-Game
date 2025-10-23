@@ -21,7 +21,6 @@ public class Player {
     // Array getter
     ArrayList<Integer> getSelectedNumbers(){
         return new ArrayList<Integer>(this.selectedNumbers);
-
     }
 
     void addNum(Integer num){

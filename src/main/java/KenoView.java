@@ -6,9 +6,9 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
-public class KenoView {
 
-    private KenoController controller;
+public class KenoView {
+    KenoController controller;
 
     void setController(KenoController controller){
         this.controller = controller;
@@ -20,6 +20,7 @@ public class KenoView {
         BorderPane root = new BorderPane();
 
         Text kenoText = new Text("KENO");
+        kenoText.setStyle("-fx-text-fill: white; -fx-font-size: 100; -fx-font-weight: bold;");
         Button menuButton = new Button("Menu");
         Button startButton = new Button("START");
 
@@ -106,6 +107,8 @@ public class KenoView {
                     // Call handler when button is pressed
                     this.controller.handleNumberSelection(buttonNum);
                 });
+                button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
+                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
                 grid.add(button, col , row);
             }
         }
