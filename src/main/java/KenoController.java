@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.ArrayList;
+import javafx.scene.control.Button;
 
 
 public class KenoController{
@@ -22,15 +24,18 @@ public class KenoController{
     }
 
     // Need to implement selectedNumber.size() <= numSpots
-    public void handleNumberSelection(Integer buttonNum) {
+    public void handleNumberSelection(Integer buttonNum, Button button) {
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
         if(this.model.getUser().getSelectedNumbers().contains(buttonNum)){
             this.model.getUser().removeNum(buttonNum);
-
+            button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
+                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
         }else if (this.model.getUser().getSelectedNumbers().size() < this.model.getUser().getNumSpots()){
             this.model.getUser().addNum(buttonNum);
+            button.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
+                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
         }
     }
 

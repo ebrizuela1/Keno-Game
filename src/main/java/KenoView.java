@@ -105,7 +105,7 @@ public class KenoView {
                     // Get the button number
                     Integer buttonNum = Integer.parseInt(button.getText());
                     // Call handler when button is pressed
-                    this.controller.handleNumberSelection(buttonNum);
+                    this.controller.handleNumberSelection(buttonNum, button);
                 });
                 button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
                         "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
