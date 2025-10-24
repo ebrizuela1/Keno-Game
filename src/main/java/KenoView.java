@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 
 public class KenoView {
     KenoController controller;
@@ -71,6 +72,10 @@ public class KenoView {
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);
+
+        // Navbar : Continue, numSpots, numDrawings, Auto continue, auto select nums
+        HBox navBar = new HBox();
+
         // Continue
         Button continueButton = new Button("Continue");
         continueButton.setOnAction(event -> {
@@ -89,20 +94,14 @@ public class KenoView {
             int num = numSpotsDropdown.getValue();
             this.controller.handleNumSpots(num);
         });
-        root.setRight(numSpotsDropdown);
+
+        // Add all nav bar components to Hbox : navBar
+        navBar.getChildren().addAll(exitButton, continueButton, numSpotsDropdown);
 
         // Setting the BorderPane
-        root.setLeft(exitButton);
         root.setCenter(grid);
-        root.setTop(continueButton);
+        root.setTop(navBar);
 
-        // TESTING BUTTON ONLY
-        Button arrayTest = new Button("arrayTest");
-        arrayTest.setOnAction(event -> {
-            this.controller.showList();
-        });
-
-        //root.setRight(arrayTest);
 
         // building the grid with 80 buttons
         int rows = 8;
