@@ -7,7 +7,7 @@ public class Player {
 
     Player(){
         this.numDrawings = 0;
-        this.numSpots = 5; // Set for testing
+        this.numSpots = 0; // Set for testing
         this.selectedNumbers = new ArrayList<>();
     }
     Integer getNumDrawings(){

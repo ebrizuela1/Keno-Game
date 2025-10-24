@@ -1,3 +1,4 @@
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -80,6 +81,15 @@ public class KenoView {
         exitButton.setOnAction(event -> {
             this.controller.handleWelcomeScene();
         } );
+
+        ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
+        Integer[] nums = {1,2,4,8,10};
+        numSpotsDropdown.getItems().addAll(nums);
+        numSpotsDropdown.setOnAction(event -> {
+            int num = numSpotsDropdown.getValue();
+            this.controller.handleNumSpots(num);
+        });
+        root.setRight(numSpotsDropdown);
 
         // Setting the BorderPane
         root.setLeft(exitButton);
