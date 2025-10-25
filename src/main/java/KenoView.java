@@ -4,11 +4,25 @@ import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class KenoView {
     KenoController controller;
+
+    private Map<Integer, Button> numberButtons;
+    private GridPane grid;
+
+    KenoView(){
+        this.numberButtons = new HashMap<>();
+        this.grid = new GridPane();
+    }
+
 
     void setController(KenoController controller){
         this.controller = controller;
@@ -16,11 +30,18 @@ public class KenoView {
 
     // Builds the welcome scene Keno, Menu
     Scene buildWelcomeScene(){
+        String buttonStyling = "-fx-background-color: #4CAF50; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 5; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1); " +
+                "-fx-font-size: 24px; ";
         // Initialize the root of scene
         BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2a5298, #1e3c72);");
 
         Text kenoText = new Text("KENO");
-        kenoText.setStyle("-fx-text-fill: white; -fx-font-size: 100; -fx-font-weight: bold;");
+        kenoText.setStyle("-fx-fill: white; -fx-font-size: 100; -fx-font-weight: bold;");
         Button menuButton = new Button("Menu");
         Button startButton = new Button("START");
 
@@ -32,14 +53,19 @@ public class KenoView {
             this.controller.handleGameScene();
         });
 
-        // text : KENO
-        root.setCenter(kenoText);
+        startButton.setStyle(buttonStyling);
+        menuButton.setStyle(buttonStyling);
 
-        // Start Button
-        root.setBottom(startButton);
+        VBox CenterView = new VBox();
+        CenterView.getChildren().addAll(kenoText,startButton);
+        CenterView.setAlignment(Pos.CENTER);
+        CenterView.setSpacing(20);
+        root.setCenter(CenterView);
 
         // Menu Button
-        root.setLeft(menuButton);
+        root.setTop(menuButton);
+
+        BorderPane.setMargin(menuButton, new Insets(10));
 
         return new Scene(root, 500, 500);
     }
@@ -65,8 +91,6 @@ public class KenoView {
     // Builds the Actual Game
     Scene buildGameScene(){
         BorderPane root = new BorderPane();
-
-        GridPane grid = new GridPane();
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);
@@ -104,6 +128,7 @@ public class KenoView {
                 button.setOnAction(event -> {
                     // Get the button number
                     Integer buttonNum = Integer.parseInt(button.getText());
+                    numberButtons.put(buttonNum, button);
                     // Call handler when button is pressed
                     this.controller.handleNumberSelection(buttonNum, button);
                 });
