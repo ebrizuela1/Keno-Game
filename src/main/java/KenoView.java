@@ -1,3 +1,4 @@
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,6 +96,10 @@ public class KenoView {
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);
+
+        // Navbar : Continue, numSpots, numDrawings, Auto continue, auto select nums
+        HBox navBar = new HBox();
+
         // Continue
         Button continueButton = new Button("Continue");
         continueButton.setOnAction(event -> {
@@ -105,18 +111,21 @@ public class KenoView {
             this.controller.handleWelcomeScene();
         } );
 
-        // Setting the BorderPane
-        root.setLeft(exitButton);
-        root.setCenter(grid);
-        root.setTop(continueButton);
-
-        // TESTING BUTTON ONLY
-        Button arrayTest = new Button("arrayTest");
-        arrayTest.setOnAction(event -> {
-            this.controller.showList();
+        ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
+        Integer[] nums = {1,2,4,8,10};
+        numSpotsDropdown.getItems().addAll(nums);
+        numSpotsDropdown.setOnAction(event -> {
+            int num = numSpotsDropdown.getValue();
+            this.controller.handleNumSpots(num);
         });
 
-        //root.setRight(arrayTest);
+        // Add all nav bar components to Hbox : navBar
+        navBar.getChildren().addAll(exitButton, continueButton, numSpotsDropdown);
+
+        // Setting the BorderPane
+        root.setCenter(grid);
+        root.setTop(navBar);
+
 
         // building the grid with 80 buttons
         int rows = 8;

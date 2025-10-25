@@ -50,4 +50,8 @@ public class KenoController{
 
 
     }
+
+    public void handleNumSpots(int num) {
+        this.model.setUserNumSpots(num);
+    }
 }
