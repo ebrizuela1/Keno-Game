@@ -48,10 +48,13 @@ public class KenoController{
     public void handleSubmit() {
         this.model.submitKenoTicket();
 
-
     }
 
     public void handleNumSpots(int num) {
         this.model.setUserNumSpots(num);
+    }
+
+    public void handleQuickPick() {
+        this.model.setUserNums();
     }
 }

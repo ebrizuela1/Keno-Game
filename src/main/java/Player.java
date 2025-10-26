@@ -32,4 +32,8 @@ public class Player {
         this.selectedNumbers.remove(num);
     }
 
+    public void setSelectedNumbers(ArrayList<Integer> newNums){
+        this.selectedNumbers = newNums;
+    }
+
 }

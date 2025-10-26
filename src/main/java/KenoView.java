@@ -111,6 +111,10 @@ public class KenoView {
             this.controller.handleWelcomeScene();
         } );
 
+        // Number of drawings
+        ComboBox<Integer> numDrawingDropdown = new ComboBox<>();
+        numDrawingDropdown.getItems().addAll(1,2,3);
+
         ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
         Integer[] nums = {1,2,4,8,10};
         numSpotsDropdown.getItems().addAll(nums);
@@ -119,8 +123,13 @@ public class KenoView {
             this.controller.handleNumSpots(num);
         });
 
+        // Auto Select Button
+        Button autoSelectNums = new Button("Auto Select");
+        autoSelectNums.setOnAction(event->{
+            controller.handleQuickPick(); });
+
         // Add all nav bar components to Hbox : navBar
-        navBar.getChildren().addAll(exitButton, continueButton, numSpotsDropdown);
+        navBar.getChildren().addAll(exitButton, continueButton, numDrawingDropdown, numSpotsDropdown, autoSelectNums);
 
         // Setting the BorderPane
         root.setCenter(grid);
