@@ -1,7 +1,6 @@
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -15,30 +14,30 @@ public class GameEngine {
         this.winningNumbers = new ArrayList<>();
         }
     // Method will return the number of correct matches
-    int checkTicket(ArrayList<Integer> playerNumbers,
+    ArrayList<Integer> checkTicket(ArrayList<Integer> playerNumbers,
                      ArrayList<Integer> winningNumbers){
         HashSet<Integer> commonNumbers = new HashSet<>(winningNumbers);
 
         // Keep all the winning numbers that were also seen in playerNumbers
         commonNumbers.retainAll(playerNumbers);
-
+        ArrayList<Integer> winningMatches = new ArrayList<>(commonNumbers);
         // Returns the number of common numbers
-        return commonNumbers.size();
+        return winningMatches;
     }
 
-    int submitKenoTicket(){
+    ArrayList<Integer> submitKenoTicket(){
         this.setWinningNumbers();
-        int totalWinningNumbers = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
+         ArrayList<Integer> winningMatches = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
         this.user.decNumDrawingsRemaining();
         // testing prints
-        if (totalWinningNumbers != 0) {
-            System.out.println("YOU WON: " + totalWinningNumbers + " matches");
+        if (winningMatches.size() != 0) {
+            System.out.println("YOU WON: Matched" + winningMatches);
         } else {
             System.out.println("Loser");
         }
         System.out.println("User List : " + this.user.getSelectedNumbers());
         System.out.println("Winning List : " + this.winningNumbers);
-        return totalWinningNumbers;
+        return winningMatches;
     }
 
     // Generates and returns a winningNumbers array of size numSpots
@@ -142,4 +141,6 @@ public class GameEngine {
         this.user.setNumSpots(0);
         this.user.setNumDrawings(this.user.getNumDrawings());
     }
+
+
 }

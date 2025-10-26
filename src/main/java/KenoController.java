@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 
@@ -51,15 +52,16 @@ public class KenoController{
     }
 
 
-    public void handleSubmit() {
+    public ArrayList<Integer> handleSubmit() {
         if(!this.model.isGameActive()){
             this.model.setGameActive(true);
         }
-        int matches = this.model.submitKenoTicket();
+        ArrayList<Integer> matches = this.model.submitKenoTicket();
         ArrayList<Integer> winners = this.model.getWinningNumbers();
         int remaining = this.model.getDrawingsRemaining();
 
 //        this.view.animateDraw(winners, matches, remaining)
+        return matches;
     }
 
     public void handleNumSpots(int num) {
@@ -127,6 +129,18 @@ public class KenoController{
         );
         // Tell the highlighter to run 20 times
         highlighter.setCycleCount(winningNumbers.size());
+        highlighter.setOnFinished(event -> {
+            // This code will run only after the last number is highlighted
+
+            // 1. Calculate the winnings (this logic should be in the model)
+            ArrayList<Integer> winnings = this.handleSubmit();
+
+            // 2. Add the winnings to the balance
+            this.addWinnings(winnings);
+
+            // 3. (Optional) Re-enable buttons, show an alert, etc.
+            // this.view.getContinueButton().setDisable(false);
+        });
         highlighter.play(); // Run the loop
     }
 
@@ -146,6 +160,39 @@ public class KenoController{
                 unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
                         "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
             }
+        }
+    }
+
+    public void addWinnings(ArrayList<Integer> matches) {
+        Label playerBalance = this.view.getBalanceLabel();
+        if (matches == null){
+            System.out.println("No Winnings");
+        }else{
+            System.out.println("Matches");
+            for (Integer number : matches){
+                System.out.println(number);
+
+            }
+//            switch(this.model.getUserNumSpots()){
+//                case 1: {
+//
+//                    break;
+//                }
+//                case 2: {
+//
+//                    break;
+//                }
+//                case 4:{
+//                    break;
+//                }
+//                case 8:{
+//
+//                }
+//                case 10:{
+//
+//                }
+//            }
+
         }
     }
 }

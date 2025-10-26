@@ -1,5 +1,6 @@
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -13,6 +14,7 @@ import javafx.scene.control.Alert.AlertType;
 
 public class KenoView {
     KenoController controller;
+    private Label balanceLabel;
 
     private Map<Integer, Button> numberButtons;
 
@@ -26,6 +28,10 @@ public class KenoView {
 
     void setController(KenoController controller){
         this.controller = controller;
+    }
+
+    Label getBalanceLabel(){
+        return this.balanceLabel;
     }
 
     // Builds the welcome scene Keno, Menu
@@ -115,6 +121,7 @@ public class KenoView {
             if(selectedCount == spotsToPlay){
                 this.controller.handleSubmit();
                 this.controller.handleDisplayWinning();
+
                 numSpotsDropdown.setDisable(true);
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
@@ -156,6 +163,11 @@ public class KenoView {
         // Add all nav bar components to Hbox : navBar
         navBar.getChildren().addAll(exitButton, space, gameControls);
 
+        VBox playerStats = new VBox();
+        playerStats.setMaxSize(50,50);
+        Text Player = new Text("Player");
+        this.balanceLabel = new Label("$0");
+        playerStats.getChildren().addAll(Player, this.balanceLabel);
         // building the grid with 80 buttons
         int rows = 8;
         int cols = 10;
@@ -183,8 +195,16 @@ public class KenoView {
                 "-fx-text-fill: black; " +
                 "-fx-font-weight: bold; " +
                 "-fx-background-radius: 5;";
+        String playerStatsStyle = "-fx-background-color: #2a5298;" +
+                "-fx-background-radius: 15 ;" +
+                "-fx-padding: 20px;";
+        String playerStyle = "-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: white;";
+        String balanceStyle = "-fx-font-size: 18px; -fx-text-fill: white;";
         continueButton.setStyle(controlButtonStyle);
         exitButton.setStyle(controlButtonStyle);
+        playerStats.setStyle(playerStatsStyle);
+        balanceLabel.setStyle(balanceStyle);
+        Player.setStyle(playerStyle);
         numSpotsDropdown.setStyle(controlButtonStyle);
         numDrawingDropdown.setStyle(controlButtonStyle);
         autoSelect.setStyle(controlButtonStyle);
@@ -193,6 +213,7 @@ public class KenoView {
         // Setting the BorderPane
         root.setCenter(grid);
         root.setTop(navBar);
+        root.setLeft(playerStats);
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);

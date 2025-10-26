@@ -5,6 +5,7 @@ public class Player {
     private Integer numSpots;
     private ArrayList<Integer> selectedNumbers;
     private Integer numDrawingsRemaining;
+    private Integer balance;
     private boolean isGameActive;
 
     Player(){
@@ -13,6 +14,7 @@ public class Player {
         this.selectedNumbers = new ArrayList<>();
         this.numDrawingsRemaining = 0;
         this.isGameActive = false;
+        this.balance = 0;
     }
     Integer getNumDrawings(){
         return this.numDrawings;
