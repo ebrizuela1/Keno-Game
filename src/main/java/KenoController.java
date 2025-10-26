@@ -1,10 +1,12 @@
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 
 public class KenoController{
@@ -90,9 +92,6 @@ public class KenoController{
         // Set the numbers while returning it so we can iterate and highlight in KenoView
         ArrayList<Integer> autoNums = new ArrayList<Integer>(this.model.setUserNums());
 
-
-        // DEBUG 2: Does the map from the view actually have buttons in it?
-
         for(Integer number : autoNums){
             Button numberToHighlight = map.get(number);
             if (numberToHighlight != null){
@@ -101,5 +100,52 @@ public class KenoController{
             }
         }
 
+    }
+
+    public void handleDisplayWinning() {
+        Map<Integer, Button> map = this.view.getNumberButtons();
+        ArrayList<Integer> winningNumbers = this.model.getWinningNumbers();
+
+        // Use atomic Integer to track our loop (cannot use int or Integer with TimeLine)
+        AtomicInteger counter = new AtomicInteger(0);
+        // Timeline will trigger every 1000 millis (1 second)
+        Timeline highlighter = new Timeline(
+                // Logic that will run every second
+                new KeyFrame(Duration.millis(1000), event ->{
+                    Integer number = winningNumbers.get(counter.getAndIncrement());
+                    Button winningHighlight = map.get(number);
+
+                    // Actual Highlighting logic
+                    if (this.model.getUserList().contains(number)){
+                        winningHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; -fx-border-color: #9234eb;" +
+                                "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white; -fx-border-width: 3px; -fx-border-radius : 10;");
+                    }else{
+                        winningHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #9234eb; " +
+                                "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                    }
+                })
+        );
+        // Tell the highlighter to run 20 times
+        highlighter.setCycleCount(winningNumbers.size());
+        highlighter.play(); // Run the loop
+    }
+
+    public void handleClearWinning() {
+        Map<Integer, Button> map = this.view.getNumberButtons();
+        if (this.model.getWinningNumbers() == null){return;}
+        ArrayList<Integer> winningNumbers = this.model.getWinningNumbers();
+
+        System.out.println("Winning array" + winningNumbers);
+        for (Integer number : winningNumbers){
+            Button unhighlight = map.get(number);
+
+            if (this.model.getUserList().contains(number)){
+                continue;
+            }else{
+                System.out.println("Cleared : "+ number);
+                unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
+                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+            }
+        }
     }
 }

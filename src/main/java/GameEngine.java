@@ -12,6 +12,7 @@ public class GameEngine {
 
     GameEngine(Player user){
         this.user = user;
+        this.winningNumbers = new ArrayList<>();
         }
     // Method will return the number of correct matches
     int checkTicket(ArrayList<Integer> playerNumbers,

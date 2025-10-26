@@ -107,11 +107,14 @@ public class KenoView {
 
         // Continue
         continueButton.setOnAction(event -> {
+            // Clear all the old winning numbers
+            this.controller.handleClearWinning();
             int selectedCount = this.controller.getSelectedNumberCount();
             int spotsToPlay = this.controller.getNumSpots();
 
             if(selectedCount == spotsToPlay){
                 this.controller.handleSubmit();
+                this.controller.handleDisplayWinning();
                 numSpotsDropdown.setDisable(true);
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
