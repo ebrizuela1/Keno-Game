@@ -1,28 +1,22 @@
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.*;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
-import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-
 import java.util.HashMap;
 import java.util.Map;
-
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class KenoView {
     KenoController controller;
 
     private Map<Integer, Button> numberButtons;
-    private GridPane grid;
 
     KenoView(){
         this.numberButtons = new HashMap<>();
-        this.grid = new GridPane();
     }
 
 
@@ -92,40 +86,63 @@ public class KenoView {
     }
     // Builds the Actual Game
     Scene buildGameScene(){
+        // initializing all elements in view
         BorderPane root = new BorderPane();
-        // Add spacing/padding for all elements in grid
-        grid.setVgap(3);
-        grid.setHgap(3);
-
-        // Navbar : Continue, numSpots, numDrawings, Auto continue, auto select nums
         HBox navBar = new HBox();
+        GridPane grid = new GridPane();
+        Button continueButton = new Button("Continue");
+        Button exitButton = new Button("Exit");
+        ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
+        ComboBox<Integer> numDrawingDropdown = new ComboBox<>();
+        HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, continueButton);
+        Region space = new Region();
+
+        //disable grid until number of spots are chosen and a grid button is pressed
+        grid.setDisable(true);
 
         // Continue
-        Button continueButton = new Button("Continue");
         continueButton.setOnAction(event -> {
-            this.controller.handleSubmit();
-        } );
-;        // Exit : returns to welcome scene
-        Button exitButton = new Button("Exit");
+            int selectedCount = this.controller.getSelectedNumberCount();
+            int spotsToPlay = this.controller.getNumSpots();
+
+            if(selectedCount == spotsToPlay){
+                this.controller.handleSubmit();
+                numSpotsDropdown.setDisable(true);
+            } else {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Selection Incomplete");
+                alert.setHeaderText("Not enough numbers selected.");
+                alert.setContentText("You chose to play " + spotsToPlay + " spots, " +
+                        "but you have only selected " + selectedCount + " numbers.");
+                alert.showAndWait();
+            }
+        });
+       // Exit : returns to welcome scene
         exitButton.setOnAction(event -> {
             this.controller.handleWelcomeScene();
         } );
 
-        ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
-        Integer[] nums = {1,2,4,8,10};
-        numSpotsDropdown.getItems().addAll(nums);
+        // implementing the number of spots dropdown
+        Integer[] numSpots = {1,2,4,8,10};
+        numSpotsDropdown.getItems().addAll(numSpots);
+        numSpotsDropdown.setPromptText("Select Num Spots");
         numSpotsDropdown.setOnAction(event -> {
             int num = numSpotsDropdown.getValue();
             this.controller.handleNumSpots(num);
+            grid.setDisable(false);
+        });
+
+        // implementing the number of drawings drop down
+        Integer[] numDrawing = {1,2,3,4};
+        numDrawingDropdown.getItems().addAll(numDrawing);
+        numDrawingDropdown.setPromptText("Select Num Drawing");
+        numDrawingDropdown.setOnAction(event -> {
+            int num = numDrawingDropdown.getValue();
+            this.controller.handleNumDrawings(num);
         });
 
         // Add all nav bar components to Hbox : navBar
-        navBar.getChildren().addAll(exitButton, continueButton, numSpotsDropdown);
-
-        // Setting the BorderPane
-        root.setCenter(grid);
-        root.setTop(navBar);
-
+        navBar.getChildren().addAll(exitButton, space, gameControls);
 
         // building the grid with 80 buttons
         int rows = 8;
@@ -140,12 +157,39 @@ public class KenoView {
                     numberButtons.put(buttonNum, button);
                     // Call handler when button is pressed
                     this.controller.handleNumberSelection(buttonNum, button);
+                    numSpotsDropdown.setDisable(true);
                 });
                 button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
                         "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
                 grid.add(button, col , row);
             }
         }
+
+        //  ---------- STATIC STYLING BELOW ----------
+        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffcc00, #ff8c00);");
+        String controlButtonStyle = "-fx-background-color: #B0B0B0; " +
+                "-fx-text-fill: black; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 5;";
+        continueButton.setStyle(controlButtonStyle);
+        exitButton.setStyle(controlButtonStyle);
+        numSpotsDropdown.setStyle(controlButtonStyle);
+        numDrawingDropdown.setStyle(controlButtonStyle);
+        gameControls.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(space, Priority.ALWAYS);
+        // Setting the BorderPane
+        root.setCenter(grid);
+        root.setTop(navBar);
+        // Add spacing/padding for all elements in grid
+        grid.setVgap(3);
+        grid.setHgap(3);
+        grid.setAlignment(Pos.CENTER);
+        // Navbar : Continue, numSpots, numDrawings, Auto continue, auto select nums
+        navBar.setPadding(new Insets(10));
+        navBar.setSpacing(10);
+        navBar.setAlignment(Pos.CENTER);
+        BorderPane.setAlignment(grid, Pos.CENTER);
+
         return (new Scene(root, 700, 500));
     }
 }

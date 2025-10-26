@@ -46,12 +46,29 @@ public class KenoController{
 
 
     public void handleSubmit() {
-        this.model.submitKenoTicket();
+        if(!this.model.isGameActive()){
+            this.model.setGameActive(true);
+        }
+        int matches = this.model.submitKenoTicket();
+        ArrayList<Integer> winners = this.model.getWinningNumbers();
+        int remaining = this.model.getDrawingsRemaining();
 
-
+//        this.view.animateDraw(winners, matches, remaining)
     }
 
     public void handleNumSpots(int num) {
         this.model.setUserNumSpots(num);
+    }
+
+    public void handleNumDrawings(int num) {
+        this.model.setUserNumDrawings(num);
+    }
+
+    public int getSelectedNumberCount() {
+        return this.model.getUserList().size();
+    }
+
+    public int getNumSpots() {
+        return this.model.getUserNumSpots();
     }
 }

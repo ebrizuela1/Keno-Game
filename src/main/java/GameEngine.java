@@ -23,16 +23,19 @@ public class GameEngine {
         return commonNumbers.size();
     }
 
-    void submitKenoTicket(){
+    int submitKenoTicket(){
         this.setWinningNumbers();
         int totalWinningNumbers = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
+        this.user.decNumDrawingsRemaining();
+        // testing prints
         if (totalWinningNumbers != 0) {
-            System.out.println("YOU WON: " + totalWinningNumbers + "matches");
+            System.out.println("YOU WON: " + totalWinningNumbers + " matches");
         } else {
             System.out.println("Loser");
         }
         System.out.println("User List : " + this.user.getSelectedNumbers());
         System.out.println("Winning List : " + this.winningNumbers);
+        return totalWinningNumbers;
     }
 
     // Generates and returns a winningNumbers array of size numSpots
@@ -41,7 +44,7 @@ public class GameEngine {
         ArrayList<Integer> winning = new ArrayList<>();
         Random randNum = new Random();
 
-        for (int i  = 0 ; i < numSpots ; i++){
+        for (int i  = 0 ; i < 20 ; i++){
                 int randWinning = randNum.nextInt(80) + 1;
                 // Ensure we do not add a number that is already in list
                 while (winning.contains(randWinning)){
@@ -56,7 +59,6 @@ public class GameEngine {
         // Return a copy since ArrayList is a mutatable object
         return new ArrayList<Integer>(winningNumbers);
     }
-
 
     public ArrayList<Integer> getUserList() {
         return this.user.getSelectedNumbers();
@@ -77,5 +79,24 @@ public class GameEngine {
 
     public int getUserNumSpots(){
         return this.user.getNumSpots();
+    }
+    public void setUserNumDrawings(Integer value) {
+        this.user.setNumDrawings(value);
+    }
+
+    public int getDrawingsRemaining(){
+        return this.user.getNumDrawings();
+    }
+    public boolean isGameActive(){
+        return this.user.isGameActive();
+    }
+    public void setGameActive(boolean active){
+        this.user.setIsGameActive(active);
+    }
+    public void resetGame(){
+        this.user.clearSelections();
+        this.user.setIsGameActive(false);
+        this.user.setNumSpots(0);
+        this.user.setNumDrawings(this.user.getNumDrawings());
     }
 }
