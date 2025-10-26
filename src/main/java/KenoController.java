@@ -52,16 +52,12 @@ public class KenoController{
     }
 
 
-    public ArrayList<Integer> handleSubmit() {
+    public void handleSubmit() {
         if(!this.model.isGameActive()){
             this.model.setGameActive(true);
         }
         ArrayList<Integer> matches = this.model.submitKenoTicket();
-        ArrayList<Integer> winners = this.model.getWinningNumbers();
-        int remaining = this.model.getDrawingsRemaining();
-
-//        this.view.animateDraw(winners, matches, remaining)
-        return matches;
+        this.handleDisplayWinning(matches);
     }
 
     public void handleNumSpots(int num) {
@@ -104,7 +100,7 @@ public class KenoController{
 
     }
 
-    public void handleDisplayWinning() {
+    public void handleDisplayWinning(ArrayList<Integer> matches) {
         Map<Integer, Button> map = this.view.getNumberButtons();
         ArrayList<Integer> winningNumbers = this.model.getWinningNumbers();
 
@@ -133,10 +129,19 @@ public class KenoController{
             // This code will run only after the last number is highlighted
 
             // 1. Calculate the winnings (this logic should be in the model)
-            ArrayList<Integer> winnings = this.handleSubmit();
+//            ArrayList<Integer> winnings = this.handleSubmit();
 
             // 2. Add the winnings to the balance
-            this.addWinnings(winnings);
+            this.addWinnings(matches);
+
+            Button continueBtn = this.view.getContinueButton();
+            if(continueBtn != null){
+                continueBtn.setDisable(false);
+            }
+            Button autoSelectBtn = this.view.getAutoSelectButton();
+            if (autoSelectBtn != null) {
+                autoSelectBtn.setDisable(false);
+            }
 
             // 3. (Optional) Re-enable buttons, show an alert, etc.
             // this.view.getContinueButton().setDisable(false);

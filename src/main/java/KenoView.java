@@ -15,6 +15,8 @@ import javafx.scene.control.Alert.AlertType;
 public class KenoView {
     KenoController controller;
     private Label balanceLabel;
+    private Button continueButton;
+    private Button autoSelect;
 
     private Map<Integer, Button> numberButtons;
 
@@ -100,9 +102,9 @@ public class KenoView {
         BorderPane root = new BorderPane();
         HBox navBar = new HBox();
         GridPane grid = new GridPane();
-        Button continueButton = new Button("Continue");
+        this.continueButton = new Button("Continue");
         Button exitButton = new Button("Exit");
-        Button autoSelect = new Button("Auto Select");
+        this.autoSelect = new Button("Auto Select");
         ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
         ComboBox<Integer> numDrawingDropdown = new ComboBox<>();
         HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, autoSelect, continueButton);
@@ -112,17 +114,19 @@ public class KenoView {
         grid.setDisable(true);
 
         // Continue
-        continueButton.setOnAction(event -> {
+        this.continueButton.setOnAction(event -> {
             // Clear all the old winning numbers
+            this.continueButton.setDisable(true);
             this.controller.handleClearWinning();
             int selectedCount = this.controller.getSelectedNumberCount();
             int spotsToPlay = this.controller.getNumSpots();
 
             if(selectedCount == spotsToPlay){
                 this.controller.handleSubmit();
-                this.controller.handleDisplayWinning();
+//                this.controller.handleDisplayWinning();
 
                 numSpotsDropdown.setDisable(true);
+                this.autoSelect.setDisable(true);
             } else {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Selection Incomplete");
@@ -130,6 +134,7 @@ public class KenoView {
                 alert.setContentText("You chose to play " + spotsToPlay + " spots, " +
                         "but you have only selected " + selectedCount + " numbers.");
                 alert.showAndWait();
+                this.continueButton.setDisable(false);
             }
         });
        // Exit : returns to welcome scene
@@ -147,7 +152,7 @@ public class KenoView {
             grid.setDisable(false);
         });
 
-        autoSelect.setOnAction(event->{
+        this.autoSelect.setOnAction(event->{
             this.controller.handleQuickPick();
         });
 
@@ -200,14 +205,14 @@ public class KenoView {
                 "-fx-padding: 20px;";
         String playerStyle = "-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: white;";
         String balanceStyle = "-fx-font-size: 18px; -fx-text-fill: white;";
-        continueButton.setStyle(controlButtonStyle);
+        this.continueButton.setStyle(controlButtonStyle);
         exitButton.setStyle(controlButtonStyle);
         playerStats.setStyle(playerStatsStyle);
         balanceLabel.setStyle(balanceStyle);
         Player.setStyle(playerStyle);
         numSpotsDropdown.setStyle(controlButtonStyle);
         numDrawingDropdown.setStyle(controlButtonStyle);
-        autoSelect.setStyle(controlButtonStyle);
+        this.autoSelect.setStyle(controlButtonStyle);
         gameControls.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(space, Priority.ALWAYS);
         // Setting the BorderPane
@@ -225,5 +230,13 @@ public class KenoView {
         BorderPane.setAlignment(grid, Pos.CENTER);
 
         return (new Scene(root, 700, 500));
+    }
+
+    public Button getContinueButton(){
+        return this.continueButton;
+    }
+
+    public Button getAutoSelectButton(){ // <-- ADD THIS
+        return this.autoSelect;
     }
 }
