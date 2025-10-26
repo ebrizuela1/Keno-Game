@@ -89,17 +89,20 @@ public class GameEngine {
         return this.user.getSelectedNumbers();
     }
 
-    public void setUserNums() {
+    // Used in Quick Pick button
+    public ArrayList<Integer> setUserNums() {
         // User must select num`spots > 0
         if (this.user.getNumSpots() > 0){
             ArrayList<Integer> randomSelected = this.getRandomNumbers();
             this.user.setSelectedNumbers(randomSelected);
+            return randomSelected;
         }else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Selection Incomplete");
             alert.setHeaderText("Please enter num of spots");
             alert.showAndWait();
         }
+        return null;
     }
 
     public void removeNumFromUser(Integer buttonNum) {

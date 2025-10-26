@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.*;
 import javafx.scene.Scene;
@@ -17,6 +18,9 @@ public class KenoView {
 
     KenoView(){
         this.numberButtons = new HashMap<>();
+    }
+    public Map<Integer, Button> getNumberButtons(){
+        return this.numberButtons;
     }
 
 
@@ -156,10 +160,10 @@ public class KenoView {
             for (int col = 0 ; col < cols ; col++){
                 String num = Integer.toString( row * cols + col + 1);
                 Button button = new Button(num);
+                // Get the button number
+                Integer buttonNum = Integer.parseInt(button.getText());
+                numberButtons.put(buttonNum, button);
                 button.setOnAction(event -> {
-                    // Get the button number
-                    Integer buttonNum = Integer.parseInt(button.getText());
-                    numberButtons.put(buttonNum, button);
                     // Call handler when button is pressed
                     this.controller.handleNumberSelection(buttonNum, button);
                     numSpotsDropdown.setDisable(true);

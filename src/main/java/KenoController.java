@@ -1,5 +1,9 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import javafx.scene.control.Button;
 
 
@@ -73,6 +77,29 @@ public class KenoController{
     }
 
     public void handleQuickPick(){
-        this.model.setUserNums();
+        Map<Integer, Button> map = this.view.getNumberButtons();
+        // Unhighlight all numbers
+        ArrayList<Integer> userNumbers = this.model.getUserList();
+        for (Integer number : userNumbers){
+            Button unhighlight = map.get(number);
+            unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
+                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+        }
+        this.model.user.clearSelections();
+
+        // Set the numbers while returning it so we can iterate and highlight in KenoView
+        ArrayList<Integer> autoNums = new ArrayList<Integer>(this.model.setUserNums());
+
+
+        // DEBUG 2: Does the map from the view actually have buttons in it?
+
+        for(Integer number : autoNums){
+            Button numberToHighlight = map.get(number);
+            if (numberToHighlight != null){
+                numberToHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
+                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+            }
+        }
+
     }
 }
