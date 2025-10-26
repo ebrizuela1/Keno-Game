@@ -1,3 +1,5 @@
+import javafx.scene.control.Alert;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -55,6 +57,29 @@ public class GameEngine {
         this.winningNumbers = winning;
     }
 
+    // Generates and returns a winningNumbers array of size numSpots
+    ArrayList<Integer> getRandomNumbers(){
+        int numSpots = this.user.getNumSpots();
+        ArrayList<Integer> winning = new ArrayList<>();
+
+        // Only run this if the user arlready set the numSpots
+        if (numSpots > 0) {
+            Random randNum = new Random();
+
+            for (int i = 0; i < numSpots; i++) {
+                int randWinning = randNum.nextInt(80) + 1;
+                // Ensure we do not add a number that is already in list
+                while (winning.contains(randWinning)) {
+                    randWinning = randNum.nextInt(80) + 1;
+                }
+                winning.add(randWinning);
+            }
+        }else{
+            System.out.println("Set the number of spots to use QuickPick");
+        }
+        return winning;
+    }
+
     ArrayList<Integer> getWinningNumbers(){
         // Return a copy since ArrayList is a mutatable object
         return new ArrayList<Integer>(winningNumbers);
@@ -62,6 +87,19 @@ public class GameEngine {
 
     public ArrayList<Integer> getUserList() {
         return this.user.getSelectedNumbers();
+    }
+
+    public void setUserNums() {
+        // User must select num`spots > 0
+        if (this.user.getNumSpots() > 0){
+            ArrayList<Integer> randomSelected = this.getRandomNumbers();
+            this.user.setSelectedNumbers(randomSelected);
+        }else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selection Incomplete");
+            alert.setHeaderText("Please enter num of spots");
+            alert.showAndWait();
+        }
     }
 
     public void removeNumFromUser(Integer buttonNum) {
@@ -80,6 +118,7 @@ public class GameEngine {
     public int getUserNumSpots(){
         return this.user.getNumSpots();
     }
+
     public void setUserNumDrawings(Integer value) {
         this.user.setNumDrawings(value);
     }

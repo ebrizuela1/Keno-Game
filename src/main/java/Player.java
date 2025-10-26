@@ -57,4 +57,8 @@ public class Player {
     void clearSelections(){
         this.selectedNumbers.clear();
     }
+
+    public void setSelectedNumbers(ArrayList<Integer> randomSelected) {
+        this.selectedNumbers = randomSelected;
+    }
 }

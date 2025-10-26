@@ -71,4 +71,8 @@ public class KenoController{
     public int getNumSpots() {
         return this.model.getUserNumSpots();
     }
+
+    public void handleQuickPick(){
+        this.model.setUserNums();
+    }
 }

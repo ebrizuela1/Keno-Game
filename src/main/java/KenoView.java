@@ -92,9 +92,10 @@ public class KenoView {
         GridPane grid = new GridPane();
         Button continueButton = new Button("Continue");
         Button exitButton = new Button("Exit");
+        Button autoSelect = new Button("Auto Select");
         ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
         ComboBox<Integer> numDrawingDropdown = new ComboBox<>();
-        HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, continueButton);
+        HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, autoSelect, continueButton);
         Region space = new Region();
 
         //disable grid until number of spots are chosen and a grid button is pressed
@@ -130,6 +131,10 @@ public class KenoView {
             int num = numSpotsDropdown.getValue();
             this.controller.handleNumSpots(num);
             grid.setDisable(false);
+        });
+
+        autoSelect.setOnAction(event->{
+            this.controller.handleQuickPick();
         });
 
         // implementing the number of drawings drop down
@@ -175,6 +180,7 @@ public class KenoView {
         exitButton.setStyle(controlButtonStyle);
         numSpotsDropdown.setStyle(controlButtonStyle);
         numDrawingDropdown.setStyle(controlButtonStyle);
+        autoSelect.setStyle(controlButtonStyle);
         gameControls.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(space, Priority.ALWAYS);
         // Setting the BorderPane
