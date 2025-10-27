@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ Robust testing of the game engine
+ * */
 class GameEngineTest {
 
     private Player player;

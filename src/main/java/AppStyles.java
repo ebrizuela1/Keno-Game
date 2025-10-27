@@ -1,6 +1,6 @@
 /**
- * A central class to hold all JavaFX style strings for the Keno application.
- * This ensures a consistent look and feel and makes styles easy to update.
+ * A static class that contains all styling strings in hopes to declutter the code
+ * working with the view
  */
 public final class AppStyles {
 

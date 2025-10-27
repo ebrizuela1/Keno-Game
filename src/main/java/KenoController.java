@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -11,30 +10,35 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 
-
+/**
+ * Controller part of MVC design pattern bridging gap between the View and the Module
+ * */
 public class KenoController{
     KenoView view;
     GameEngine model;
     MainApp main;
 
+    // Qualified constructor
     KenoController(KenoView view, GameEngine model, MainApp main){
         this.view = view;
         this.model = model;
         this.main = main;
     }
+    // Changes view to menu
     void handleMenuScene(){
         this.main.switchToMenu();
     }
+    // Changes view to welcome screen
     void handleWelcomeScene(){
         this.main.switchToWelcome();
     }
+    // Changes view to game scene
     void handleGameScene(){
         this.main.switchToGame();
         this.view.resetGameUI();
         this.model.resetGame();
     }
-
-    // Need to implement selectedNumber.size() <= numSpots
+    // Handles when a number button is selected by the user and changes its look accordingly
     public void handleNumberSelection(Integer buttonNum, Button button) {
         // If game is Active we SHOULD NOT update user selected numbers
         if (this.model.isGameActive()){
@@ -56,33 +60,28 @@ public class KenoController{
             button.setStyle(AppStyles.NUMBER_BUTTON_SELECTED);
         }
     }
-
-    public void showList() {
-        // Call the Game engine method to show user numList
-        this.model.getUserList();
-    }
-
+    // handles the event of clicking continue and calls handler for displaying matches
     public void handleSubmit() {
         ArrayList<Integer> matches = this.model.submitKenoTicket();
         this.handleDisplayWinning(matches);
     }
-
+    // sets the num spots data member in module
     public void handleNumSpots(int num) {
         this.model.setUserNumSpots(num);
     }
-
+    // sets num drawings data member in module
     public void handleNumDrawings(int num) {
         this.model.setUserNumDrawings(num);
     }
-
+    // gets the number of number buttons selected by the user
     public int getSelectedNumberCount() {
         return this.model.getUserList().size();
     }
-
+    // returns the num spots selected by user
     public int getNumSpots() {
         return this.model.getUserNumSpots();
     }
-
+    // handles the event when the user clicks on auto select and selects numSpot number of number buttons
     public void handleQuickPick(){
         // should not be able to quickpick when game is active
         if (this.model.isGameActive()){
@@ -113,7 +112,7 @@ public class KenoController{
         }
 
     }
-
+    // plays an animation of showing all the winning numbers and presenting to the user their winnings
     public void handleDisplayWinning(ArrayList<Integer> matches) {
         Map<Integer, Button> map = this.view.getNumberButtons();
         ArrayList<Integer> winningNumbers = this.model.getWinningNumbers();
@@ -176,6 +175,7 @@ public class KenoController{
         highlighter.play(); // Run the loop
     }
 
+    // removes the system selected button styling
     public void handleClearWinning() {
         Map<Integer, Button> map = this.view.getNumberButtons();
         if (this.model.getWinningNumbers() == null){return;}
@@ -195,9 +195,10 @@ public class KenoController{
         }
     }
 
+    // adds the winnings rewards to the players balance according to number of matches
     public int addWinnings(ArrayList<Integer> matches) {
         Label playerBalance = this.view.getBalanceLabel();
-        Integer value = 0;
+        int value = 0;
         if (matches == null){
             System.out.println("No Winnings");
         }else{
@@ -255,19 +256,13 @@ public class KenoController{
         return value;
     }
 
+    // getter for isGameActive
     public void setGameActive(boolean b) {
         this.model.setGameActive(b);
     }
 
+    // getter for balance
     public int getBalance() {
         return this.model.getBalance();
-    }
-
-    public int getNumDrawings() {
-        return this.model.getDrawingsRemaining();
-    }
-
-    public boolean isGameActive() {
-        return this.model.isGameActive();
     }
 }
