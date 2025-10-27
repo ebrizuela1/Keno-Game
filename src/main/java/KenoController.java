@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
@@ -32,6 +33,15 @@ public class KenoController{
 
     // Need to implement selectedNumber.size() <= numSpots
     public void handleNumberSelection(Integer buttonNum, Button button) {
+        // If game is Active we SHOULD NOT update user selected numbers
+        if (this.model.isGameActive()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Game is Active");
+            alert.setHeaderText("Cannot unselect");
+            alert.setContentText("You cannot change your selections once the game has started");
+            alert.showAndWait();
+            return;
+        }
         // Check if the number exits in selectedNums
         // -- If it does, we remove the number from selectedNumbers
         // -- Else add the number to the selectedNumbers
@@ -53,9 +63,7 @@ public class KenoController{
 
 
     public void handleSubmit() {
-        if(!this.model.isGameActive()){
-            this.model.setGameActive(true);
-        }
+
         ArrayList<Integer> matches = this.model.submitKenoTicket();
         this.handleDisplayWinning(matches);
     }
@@ -77,6 +85,15 @@ public class KenoController{
     }
 
     public void handleQuickPick(){
+        // should not be able to quickpick when game is active
+        if (this.model.isGameActive()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cannot use Auto Select");
+            alert.setHeaderText("Cannot use Auto Select");
+            alert.setContentText("You cannot use auto select when the game is session.");
+            alert.showAndWait();
+            return;
+        }
         Map<Integer, Button> map = this.view.getNumberButtons();
         // Unhighlight all numbers
         ArrayList<Integer> userNumbers = this.model.getUserList();
@@ -109,7 +126,7 @@ public class KenoController{
         // Timeline will trigger every 1000 millis (1 second)
         Timeline highlighter = new Timeline(
                 // Logic that will run every second
-                new KeyFrame(Duration.millis(1000), event ->{
+                new KeyFrame(Duration.millis(300), event ->{
                     Integer number = winningNumbers.get(counter.getAndIncrement());
                     Button winningHighlight = map.get(number);
 
@@ -126,27 +143,41 @@ public class KenoController{
         // Tell the highlighter to run 20 times
         highlighter.setCycleCount(winningNumbers.size());
         highlighter.setOnFinished(event -> {
-            // This code will run only after the last number is highlighted
 
-            // 1. Calculate the winnings (this logic should be in the model)
-//            ArrayList<Integer> winnings = this.handleSubmit();
-
-            // 2. Add the winnings to the balance
+            // 1. Calculate winnings and update balance
             this.addWinnings(matches);
 
-            Button continueBtn = this.view.getContinueButton();
-            if(continueBtn != null){
-                continueBtn.setDisable(false);
-            }
-            Button autoSelectBtn = this.view.getAutoSelectButton();
-            if (autoSelectBtn != null) {
-                autoSelectBtn.setDisable(false);
-            }
+            // 2. Count down the drawing
+            this.model.user.decNumDrawingsRemaining();
+            System.out.println("Number of Drawings left: " + this.model.getDrawingsRemaining());
 
-            // 3. (Optional) Re-enable buttons, show an alert, etc.
-            // this.view.getContinueButton().setDisable(false);
+            if (this.model.getDrawingsRemaining() > 0) {
+                // ----- MORE DRAWINGS LEFT -----
+                this.view.getContinueButton().setDisable(false);
+
+            } else {
+                // ----- LOOP IS FINISHED -----
+                // Re-enable *all* controls for a new game.
+                System.out.println("Game is done, loop is done");
+                this.view.getContinueButton().setDisable(false);
+                this.view.getNumSpotsDropdown().setDisable(false);
+                this.view.getAutoSelectButton().setDisable(false);
+                this.view.getNumDrawingDropdown().setDisable(false);
+                this.setGameActive(false); // Game is no longer active
+                this.model.resetGame();
+                this.resetGrid();
+            }
         });
         highlighter.play(); // Run the loop
+    }
+
+    private void resetGrid() {
+        Map<Integer, Button> map = this.view.getNumberButtons();
+        for(int i = 1 ; i < 81 ; i++){
+            Button resetButton = map.get(i);
+            resetButton.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
+                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+        }
     }
 
     public void handleClearWinning() {
@@ -159,7 +190,9 @@ public class KenoController{
             Button unhighlight = map.get(number);
 
             if (this.model.getUserList().contains(number)){
-                continue;
+                // Set Back to just green
+                unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
+                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
             }else{
                 System.out.println("Cleared : "+ number);
                 unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
@@ -223,5 +256,9 @@ public class KenoController{
 
             playerBalance.setText("$" + this.model.user.getBalance());
         }
+    }
+
+    public void setGameActive(boolean b) {
+        this.model.setGameActive(b);
     }
 }

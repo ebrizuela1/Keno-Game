@@ -19,9 +19,13 @@ public class KenoView {
     private Button autoSelect;
 
     private Map<Integer, Button> numberButtons;
+    private ComboBox<Integer> numSpotsDropdown;
+    private ComboBox<Integer> numDrawingDropdown;
 
     KenoView(){
         this.numberButtons = new HashMap<>();
+        this.numSpotsDropdown = new ComboBox<>();
+        this.numDrawingDropdown = new ComboBox<>();
     }
     public Map<Integer, Button> getNumberButtons(){
         return this.numberButtons;
@@ -105,8 +109,7 @@ public class KenoView {
         this.continueButton = new Button("Continue");
         Button exitButton = new Button("Exit");
         this.autoSelect = new Button("Auto Select");
-        ComboBox<Integer> numSpotsDropdown = new ComboBox<>();
-        ComboBox<Integer> numDrawingDropdown = new ComboBox<>();
+
         HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, autoSelect, continueButton);
         Region space = new Region();
 
@@ -118,24 +121,35 @@ public class KenoView {
             // Clear all the old winning numbers
             this.continueButton.setDisable(true);
             this.controller.handleClearWinning();
-            int selectedCount = this.controller.getSelectedNumberCount();
-            int spotsToPlay = this.controller.getNumSpots();
 
-            if(selectedCount == spotsToPlay){
+            // Check if the game is already active
+            if (this.controller.model.isGameActive()){
                 this.controller.handleSubmit();
-//                this.controller.handleDisplayWinning();
-
-                numSpotsDropdown.setDisable(true);
-                this.autoSelect.setDisable(true);
-            } else {
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setTitle("Selection Incomplete");
-                alert.setHeaderText("Not enough numbers selected.");
-                alert.setContentText("You chose to play " + spotsToPlay + " spots, " +
-                        "but you have only selected " + selectedCount + " numbers.");
-                alert.showAndWait();
                 this.continueButton.setDisable(false);
+            }else{
+                int selectedCount = this.controller.getSelectedNumberCount();
+                int spotsToPlay = this.controller.getNumSpots();
+                int numDrawings = this.controller.model.user.getNumDrawings();
+                if(selectedCount == spotsToPlay && numDrawings > 0){
+                    this.controller.handleSubmit();
+                    // Set the game to active so we cannot change user selected numbers
+                    this.controller.setGameActive(true);
+
+                    numSpotsDropdown.setDisable(true);
+                    numDrawingDropdown.setDisable(true);
+                    this.autoSelect.setDisable(true);
+                } else {
+                    Alert alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("Selection Incomplete");
+                    alert.setHeaderText("Not enough numbers selected.");
+                    alert.setContentText("You chose to play " + spotsToPlay + " spots, " +
+                            "but you have only selected " + selectedCount + " numbers.");
+                    alert.showAndWait();
+                    this.continueButton.setDisable(false);
+                }
             }
+
+
         });
        // Exit : returns to welcome scene
         exitButton.setOnAction(event -> {
@@ -144,9 +158,9 @@ public class KenoView {
 
         // implementing the number of spots dropdown
         Integer[] numSpots = {1,2,4,8,10};
-        numSpotsDropdown.getItems().addAll(numSpots);
-        numSpotsDropdown.setPromptText("Select Num Spots");
-        numSpotsDropdown.setOnAction(event -> {
+        this.numSpotsDropdown.getItems().addAll(numSpots);
+        this.numSpotsDropdown.setPromptText("Select Num Spots");
+        this.numSpotsDropdown.setOnAction(event -> {
             int num = numSpotsDropdown.getValue();
             this.controller.handleNumSpots(num);
             grid.setDisable(false);
@@ -158,10 +172,10 @@ public class KenoView {
 
         // implementing the number of drawings drop down
         Integer[] numDrawing = {1,2,3,4};
-        numDrawingDropdown.getItems().addAll(numDrawing);
-        numDrawingDropdown.setPromptText("Select Num Drawing");
-        numDrawingDropdown.setOnAction(event -> {
-            int num = numDrawingDropdown.getValue();
+        this.numDrawingDropdown.getItems().addAll(numDrawing);
+        this.numDrawingDropdown.setPromptText("Select Num Drawing");
+        this.numDrawingDropdown.setOnAction(event -> {
+            int num = this.numDrawingDropdown.getValue();
             this.controller.handleNumDrawings(num);
         });
 
@@ -184,7 +198,7 @@ public class KenoView {
                 Integer buttonNum = Integer.parseInt(button.getText());
                 numberButtons.put(buttonNum, button);
                 button.setOnAction(event -> {
-                    // Call handler when button is pressed
+                    // Call handler when button is pressed ONLY when game is not active
                     this.controller.handleNumberSelection(buttonNum, button);
                     numSpotsDropdown.setDisable(true);
                 });
@@ -238,5 +252,13 @@ public class KenoView {
 
     public Button getAutoSelectButton(){ // <-- ADD THIS
         return this.autoSelect;
+    }
+
+    public Node getNumSpotsDropdown() {
+        return this.numSpotsDropdown;
+    }
+
+    public Node getNumDrawingDropdown() {
+        return this.numDrawingDropdown;
     }
 }

@@ -28,7 +28,7 @@ public class GameEngine {
     ArrayList<Integer> submitKenoTicket(){
         this.setWinningNumbers();
          ArrayList<Integer> winningMatches = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
-        this.user.decNumDrawingsRemaining();
+
         // testing prints
         if (winningMatches.size() != 0) {
             System.out.println("YOU WON: Matched" + winningMatches);
@@ -127,7 +127,7 @@ public class GameEngine {
     }
 
     public int getDrawingsRemaining(){
-        return this.user.getNumDrawings();
+        return this.user.getNumDrawingsRemaining();
     }
     public boolean isGameActive(){
         return this.user.isGameActive();
