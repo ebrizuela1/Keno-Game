@@ -143,4 +143,8 @@ public class GameEngine {
     }
 
 
+    public void addMoney(Integer value) {
+        this.user.addToBalance(value);
+
+    }
 }

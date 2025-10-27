@@ -23,7 +23,9 @@ public class Player {
         this.numDrawings = newNum;
         this.numDrawingsRemaining = newNum;
     }
-
+    Integer getBalance(){
+        return this.balance;
+    }
     Integer getNumSpots(){
         return this.numSpots;
     }
@@ -63,4 +65,7 @@ public class Player {
     public void setSelectedNumbers(ArrayList<Integer> randomSelected) {
         this.selectedNumbers = randomSelected;
     }
+    public void addToBalance(Integer value){
+        this.balance += value;
+    };
 }

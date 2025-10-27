@@ -173,31 +173,55 @@ public class KenoController{
         if (matches == null){
             System.out.println("No Winnings");
         }else{
-            System.out.println("Matches");
+            System.out.println("Matches" + matches);
             for (Integer number : matches){
                 System.out.println(number);
 
             }
-//            switch(this.model.getUserNumSpots()){
-//                case 1: {
-//
-//                    break;
-//                }
-//                case 2: {
-//
-//                    break;
-//                }
-//                case 4:{
-//                    break;
-//                }
-//                case 8:{
-//
-//                }
-//                case 10:{
-//
-//                }
-//            }
+            Integer value = 0;
+            int numMatches = matches.size();
+            switch(this.model.getUserNumSpots()){
 
+                case 1: {
+                    // numSpots : 1 ; Matches Made 1
+                    // Add $2 to balance
+                    if (numMatches == 1){
+                        value = 2;
+                    }
+                    break;
+                }
+                case 2: {
+                    if (numMatches == 2){value = 11;}
+                    break;
+                }
+                case 4:{
+                    if (numMatches == 4){value = 75;}
+                    else if(numMatches == 3){ value = 5;}
+                    else if(numMatches == 2){value = 1;}
+                    break;
+                }
+                case 8:{
+                    if (numMatches == 8){value = 10000;}
+                    else if (numMatches == 7){value = 750;}
+                    else if (numMatches == 6){value = 50;}
+                    else if (numMatches == 5){value = 12;}
+                    else if (numMatches == 4){value = 2;}
+                    break;
+                }
+                case 10:{
+                    if (numMatches == 10){value = 100000;}
+                    else if(numMatches == 9){value = 4250;}
+                    else if(numMatches == 8){value = 450;}
+                    else if(numMatches == 7){value = 40;}
+                    else if(numMatches == 6){value = 15;}
+                    else if(numMatches == 5){value = 2;}
+                    else if(numMatches == 0){value = 5;}
+                    break;
+                }
+            }
+            this.model.addMoney(value);
+
+            playerBalance.setText("$" + this.model.user.getBalance());
         }
     }
 }
