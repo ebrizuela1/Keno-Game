@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -21,6 +23,7 @@ public class KenoView {
     private Map<Integer, Button> numberButtons;
     private ComboBox<Integer> numSpotsDropdown;
     private ComboBox<Integer> numDrawingDropdown;
+    private GridPane grid;
 
     KenoView(){
         this.numberButtons = new HashMap<>();
@@ -30,7 +33,6 @@ public class KenoView {
     public Map<Integer, Button> getNumberButtons(){
         return this.numberButtons;
     }
-
 
     void setController(KenoController controller){
         this.controller = controller;
@@ -42,18 +44,13 @@ public class KenoView {
 
     // Builds the welcome scene Keno, Menu
     Scene buildWelcomeScene(){
-        String buttonStyling = "-fx-background-color: #4CAF50; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 5; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1); " +
-                "-fx-font-size: 24px; ";
         // Initialize the root of scene
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2a5298, #1e3c72);");
+        root.setStyle(AppStyles.WELCOME_BACKGROUND);
 
         Text kenoText = new Text("KENO");
-        kenoText.setStyle("-fx-fill: white; -fx-font-size: 100; -fx-font-weight: bold;");
+        kenoText.setStyle(AppStyles.KENO_TITLE);
+
         Button menuButton = new Button("Menu");
         Button startButton = new Button("START");
 
@@ -65,8 +62,8 @@ public class KenoView {
             this.controller.handleGameScene();
         });
 
-        startButton.setStyle(buttonStyling);
-        menuButton.setStyle(buttonStyling);
+        startButton.setStyle(AppStyles.WELCOME_BUTTON);
+        menuButton.setStyle(AppStyles.CONTROL_BUTTON);
 
         VBox CenterView = new VBox();
         CenterView.getChildren().addAll(kenoText,startButton);
@@ -76,7 +73,6 @@ public class KenoView {
 
         // Menu Button
         root.setTop(menuButton);
-
         BorderPane.setMargin(menuButton, new Insets(10));
 
         return new Scene(root, 500, 500);
@@ -84,11 +80,16 @@ public class KenoView {
     // Builds the Menu
     Scene buildMenuScene(){
         BorderPane root = new BorderPane();
-        VBox menuOptions = new VBox();
+        root.setStyle(AppStyles.WELCOME_BACKGROUND);
+        VBox menuOptions = new VBox(20);
 
         Button odds = new Button("Odds");
+        odds.setStyle(AppStyles.CONTROL_BUTTON);
         Button rules = new Button("Rules");
+        rules.setStyle(AppStyles.CONTROL_BUTTON);
         Button exit = new Button("Exit");
+        exit.setStyle(AppStyles.CONTROL_BUTTON);
+
         menuOptions.getChildren().addAll(rules, odds, exit);
 
         rules.setOnAction(event -> {
@@ -104,10 +105,8 @@ public class KenoView {
                                "6. You win by matching your numbers to the 20 numbers drawn by the game.";
             
             alert.setContentText(rulesText);
-            
             alert.getDialogPane().setPrefSize(480, 320);
-            alert.setResizable(true); 
-            
+            alert.setResizable(true);
             alert.showAndWait();
         });
 
@@ -155,13 +154,22 @@ public class KenoView {
     Scene buildGameScene(){
         // initializing all elements in view
         BorderPane root = new BorderPane();
-        HBox navBar = new HBox();
-        GridPane grid = new GridPane();
+        HBox navBar = new HBox(10);
+        grid = new GridPane();
         this.continueButton = new Button("Continue");
         Button exitButton = new Button("Exit");
         this.autoSelect = new Button("Auto Select");
+        Button styleButton = new Button("Change Style");
+        AtomicBoolean isDefaultStyle = new AtomicBoolean(true);
 
-        HBox gameControls = new HBox(10, numDrawingDropdown, numSpotsDropdown, autoSelect, continueButton);
+        HBox gameControls = new HBox(
+                10,
+                this.numDrawingDropdown,
+                this.numSpotsDropdown,
+                this.autoSelect,
+                this.continueButton,
+                styleButton
+        );
         Region space = new Region();
 
         //disable grid until number of spots are chosen and a grid button is pressed
@@ -176,20 +184,21 @@ public class KenoView {
             // Check if the game is already active
             if (this.controller.model.isGameActive()){
                 this.controller.handleSubmit();
-                this.continueButton.setDisable(false);
             }else{
                 int selectedCount = this.controller.getSelectedNumberCount();
                 int spotsToPlay = this.controller.getNumSpots();
                 int numDrawings = this.controller.model.user.getNumDrawings();
-                if(selectedCount == spotsToPlay && numDrawings > 0){
-                    this.controller.handleSubmit();
 
+                if(selectedCount == spotsToPlay && numDrawings > 0 && spotsToPlay > 0){
                     // Set the game to active so we cannot change user selected numbers
                     this.controller.setGameActive(true);
 
                     numSpotsDropdown.setDisable(true);
                     numDrawingDropdown.setDisable(true);
                     this.autoSelect.setDisable(true);
+                    grid.setDisable(true);
+
+                    this.controller.handleSubmit();
                 } else {
                     Alert alert = new Alert(AlertType.WARNING);
                     alert.setTitle("Selection Incomplete");
@@ -203,6 +212,17 @@ public class KenoView {
 
 
         });
+
+        styleButton.setOnAction(event -> {
+            if (isDefaultStyle.get()) {
+                root.setStyle(AppStyles.GAME_BACKGROUND_DIFFERENT);
+                isDefaultStyle.set(false);
+            } else {
+                root.setStyle(AppStyles.GAME_BACKGROUND_DEFAULT);
+                isDefaultStyle.set(true);
+            }
+        });
+
        // Exit : returns to welcome scene
         exitButton.setOnAction(event -> {
             this.controller.handleWelcomeScene();
@@ -237,7 +257,7 @@ public class KenoView {
         VBox playerStats = new VBox();
         playerStats.setMaxSize(50,50);
         Text Player = new Text("Player");
-        this.balanceLabel = new Label("$0");
+        this.balanceLabel = new Label("$" + this.controller.getBalance());
         playerStats.getChildren().addAll(Player, this.balanceLabel);
         // building the grid with 80 buttons
         int rows = 8;
@@ -254,44 +274,36 @@ public class KenoView {
                     this.controller.handleNumberSelection(buttonNum, button);
                     numSpotsDropdown.setDisable(true);
                 });
-                button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
-                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                button.setStyle(AppStyles.NUMBER_BUTTON);
                 grid.add(button, col , row);
             }
         }
 
         //  ---------- STATIC STYLING BELOW ----------
-        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffcc00, #ff8c00);");
-        String controlButtonStyle = "-fx-background-color: #B0B0B0; " +
-                "-fx-text-fill: black; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 5;";
-        String playerStatsStyle = "-fx-background-color: #2a5298;" +
-                "-fx-background-radius: 15 ;" +
-                "-fx-padding: 20px;";
-        String playerStyle = "-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: white;";
-        String balanceStyle = "-fx-font-size: 18px; -fx-text-fill: white;";
-        this.continueButton.setStyle(controlButtonStyle);
-        exitButton.setStyle(controlButtonStyle);
-        playerStats.setStyle(playerStatsStyle);
-        balanceLabel.setStyle(balanceStyle);
-        Player.setStyle(playerStyle);
-        numSpotsDropdown.setStyle(controlButtonStyle);
-        numDrawingDropdown.setStyle(controlButtonStyle);
-        this.autoSelect.setStyle(controlButtonStyle);
+        root.setStyle(AppStyles.GAME_BACKGROUND_DEFAULT);
+        this.continueButton.setStyle(AppStyles.CONTROL_BUTTON);
+        exitButton.setStyle(AppStyles.CONTROL_BUTTON);
+        playerStats.setStyle(AppStyles.PLAYER_STATS_BOX); // playerStatsStyle
+        balanceLabel.setStyle(AppStyles.PLAYER_STATS_BALANCE); // balanceStyle
+        Player.setStyle(AppStyles.PLAYER_STATS_HEADER); // playerStyle
+        numSpotsDropdown.setStyle(AppStyles.CONTROL_BUTTON);
+        numDrawingDropdown.setStyle(AppStyles.CONTROL_BUTTON);
+        this.autoSelect.setStyle(AppStyles.CONTROL_BUTTON);
+        styleButton.setStyle(AppStyles.CONTROL_BUTTON);
+
         gameControls.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(space, Priority.ALWAYS);
         // Setting the BorderPane
         root.setCenter(grid);
         root.setTop(navBar);
         root.setLeft(playerStats);
+        BorderPane.setMargin(playerStats, new Insets(10, 5, 10, 10));
         // Add spacing/padding for all elements in grid
         grid.setVgap(3);
         grid.setHgap(3);
         grid.setAlignment(Pos.CENTER);
-        // Navbar : Continue, numSpots, numDrawings, Auto continue, auto select nums
+
         navBar.setPadding(new Insets(10));
-        navBar.setSpacing(10);
         navBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(grid, Pos.CENTER);
 
@@ -312,5 +324,21 @@ public class KenoView {
 
     public Node getNumDrawingDropdown() {
         return this.numDrawingDropdown;
+    }
+
+    public void resetGameUI(){
+        for (Button btn : numberButtons.values()) {
+            btn.setStyle(AppStyles.NUMBER_BUTTON);
+        }
+        grid.setDisable(true);
+        numSpotsDropdown.setDisable(false);
+        numDrawingDropdown.setDisable(false);
+        autoSelect.setDisable(false);
+        continueButton.setDisable(false);
+
+        numSpotsDropdown.setValue(null);
+        numDrawingDropdown.setValue(null);
+
+        balanceLabel.setText("$" + controller.getBalance());
     }
 }

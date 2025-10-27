@@ -30,6 +30,8 @@ public class KenoController{
     }
     void handleGameScene(){
         this.main.switchToGame();
+        this.view.resetGameUI();
+        this.model.resetGame();
     }
 
     // Need to implement selectedNumber.size() <= numSpots
@@ -48,12 +50,10 @@ public class KenoController{
         // -- Else add the number to the selectedNumbers
         if(this.model.getUserList().contains(buttonNum)){
             this.model.removeNumFromUser(buttonNum);
-            button.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
-                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+            button.setStyle(AppStyles.NUMBER_BUTTON);
         }else if (this.model.getUserList().size() < this.model.getUserNumSpots()){
             this.model.addNumFromUser(buttonNum);
-            button.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
-                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+            button.setStyle(AppStyles.NUMBER_BUTTON_SELECTED);
         }
     }
 
@@ -64,7 +64,6 @@ public class KenoController{
 
 
     public void handleSubmit() {
-
         ArrayList<Integer> matches = this.model.submitKenoTicket();
         this.handleDisplayWinning(matches);
     }
@@ -100,8 +99,7 @@ public class KenoController{
         ArrayList<Integer> userNumbers = this.model.getUserList();
         for (Integer number : userNumbers){
             Button unhighlight = map.get(number);
-            unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
-                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+            unhighlight.setStyle(AppStyles.NUMBER_BUTTON);
         }
         this.model.user.clearSelections();
 
@@ -111,8 +109,7 @@ public class KenoController{
         for(Integer number : autoNums){
             Button numberToHighlight = map.get(number);
             if (numberToHighlight != null){
-                numberToHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
-                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                numberToHighlight.setStyle(AppStyles.NUMBER_BUTTON_SELECTED);
             }
         }
 
@@ -133,11 +130,9 @@ public class KenoController{
 
                     // Actual Highlighting logic
                     if (this.model.getUserList().contains(number)){
-                        winningHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; -fx-border-color: #9234eb;" +
-                                "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white; -fx-border-width: 3px; -fx-border-radius : 10;");
+                        winningHighlight.setStyle(AppStyles.NUMBER_BUTTON_MATCH);
                     }else{
-                        winningHighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #9234eb; " +
-                                "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                        winningHighlight.setStyle(AppStyles.NUMBER_BUTTON_WIN);
                     }
                 })
         );
@@ -170,13 +165,9 @@ public class KenoController{
                     overviewAlert.showAndWait();
                     // Re-enable *all* controls for a new game.
                     System.out.println("Game is done, loop is done");
-                    this.view.getContinueButton().setDisable(false);
-                    this.view.getNumSpotsDropdown().setDisable(false);
-                    this.view.getAutoSelectButton().setDisable(false);
-                    this.view.getNumDrawingDropdown().setDisable(false);
-                    this.setGameActive(false); // Game is no longer active
+
                     this.model.resetGame();
-                    this.resetGrid();
+                    this.view.resetGameUI();
                 }
             });
         });
@@ -204,12 +195,10 @@ public class KenoController{
 
             if (this.model.getUserList().contains(number)){
                 // Set Back to just green
-                unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #00FF00; " +
-                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                unhighlight.setStyle(AppStyles.NUMBER_BUTTON_SELECTED);
             }else{
                 System.out.println("Cleared : "+ number);
-                unhighlight.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
-                        "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
+                unhighlight.setStyle(AppStyles.NUMBER_BUTTON);
             }
         }
     }
@@ -266,15 +255,27 @@ public class KenoController{
                     break;
                 }
             }
-            this.model.addMoney(value);
 
-            playerBalance.setText("$" + this.model.user.getBalance());
 
         }
+        this.model.addMoney(value);
+        playerBalance.setText("$" + this.model.user.getBalance());
         return value;
     }
 
     public void setGameActive(boolean b) {
         this.model.setGameActive(b);
+    }
+
+    public int getBalance() {
+        return this.model.getBalance();
+    }
+
+    public int getNumDrawings() {
+        return this.model.getDrawingsRemaining();
+    }
+
+    public boolean isGameActive() {
+        return this.model.isGameActive();
     }
 }

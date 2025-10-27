@@ -27,7 +27,8 @@ public class GameEngine {
 
     ArrayList<Integer> submitKenoTicket(){
         this.setWinningNumbers();
-         ArrayList<Integer> winningMatches = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
+        ArrayList<Integer> winningMatches = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
+        this.user.decNumDrawingsRemaining();
 
         // testing prints
         if (winningMatches.size() != 0) {
@@ -145,6 +146,8 @@ public class GameEngine {
 
     public void addMoney(Integer value) {
         this.user.addToBalance(value);
-
+    }
+    public int getBalance(){
+        return this.user.getBalance();
     }
 }

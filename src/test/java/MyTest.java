@@ -67,7 +67,7 @@ class GameEngineTest {
         assertEquals(8, randomNums.size(), "Should return 8 random numbers for 8 spots");
 
         player.setNumSpots(0);
-        ArrayList<Integer> randomNums = gameEngine.getRandomNumbers();
+        randomNums = gameEngine.getRandomNumbers();
         assertTrue(randomNums.isEmpty(), "Should return an empty list if numSpots is 0");
     }
 
@@ -78,7 +78,6 @@ class GameEngineTest {
         assertEquals(4, player.getNumDrawingsRemaining(), "Should start with 4 drawings");
         
         gameEngine.submitKenoTicket();
-        
         assertEquals(3, player.getNumDrawingsRemaining(), "Should have 3 drawings remaining after submit");
     }
     

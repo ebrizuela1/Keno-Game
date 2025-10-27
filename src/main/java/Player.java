@@ -14,7 +14,7 @@ public class Player {
         this.selectedNumbers = new ArrayList<>();
         this.numDrawingsRemaining = 0;
         this.isGameActive = false;
-        this.balance = 0;
+        this.balance = 200;
     }
     Integer getNumDrawings(){
         return this.numDrawings;
@@ -32,12 +32,10 @@ public class Player {
     void setNumSpots(int newNum){
         this.numSpots = newNum;
     }
-
     // Array getter : returns copy
     ArrayList<Integer> getSelectedNumbers(){
         return new ArrayList<Integer>(this.selectedNumbers);
     }
-
     void addNum(Integer num){
         this.selectedNumbers.add(num);
     }
@@ -61,7 +59,6 @@ public class Player {
     void clearSelections(){
         this.selectedNumbers.clear();
     }
-
     public void setSelectedNumbers(ArrayList<Integer> randomSelected) {
         this.selectedNumbers = randomSelected;
     }
