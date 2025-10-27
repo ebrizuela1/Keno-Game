@@ -183,6 +183,7 @@ public class KenoView {
                 int numDrawings = this.controller.model.user.getNumDrawings();
                 if(selectedCount == spotsToPlay && numDrawings > 0){
                     this.controller.handleSubmit();
+
                     // Set the game to active so we cannot change user selected numbers
                     this.controller.setGameActive(true);
 

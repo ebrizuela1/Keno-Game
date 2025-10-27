@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -143,31 +144,43 @@ public class KenoController{
         // Tell the highlighter to run 20 times
         highlighter.setCycleCount(winningNumbers.size());
         highlighter.setOnFinished(event -> {
+            Platform.runLater(() -> {
+                // 1. Calculate winnings and update balance
+                int value = this.addWinnings(matches);
 
-            // 1. Calculate winnings and update balance
-            this.addWinnings(matches);
+                // 2. Count down the drawing
+                this.model.user.decNumDrawingsRemaining();
+                System.out.println("Number of Drawings left: " + this.model.getDrawingsRemaining());
 
-            // 2. Count down the drawing
-            this.model.user.decNumDrawingsRemaining();
-            System.out.println("Number of Drawings left: " + this.model.getDrawingsRemaining());
+                if (this.model.getDrawingsRemaining() > 0) {
+                    // ----- MORE DRAWINGS LEFT -----
+                    Alert drawAlert = new Alert(Alert.AlertType.INFORMATION);
+                    drawAlert.setTitle("Draw Results");
+                    drawAlert.setHeaderText("Winnings this round: $" + value);
+                    drawAlert.setContentText("Your new balance is: $" + this.model.user.getBalance());
+                    drawAlert.showAndWait();
+                    this.view.getContinueButton().setDisable(false);
 
-            if (this.model.getDrawingsRemaining() > 0) {
-                // ----- MORE DRAWINGS LEFT -----
-                this.view.getContinueButton().setDisable(false);
-
-            } else {
-                // ----- LOOP IS FINISHED -----
-                // Re-enable *all* controls for a new game.
-                System.out.println("Game is done, loop is done");
-                this.view.getContinueButton().setDisable(false);
-                this.view.getNumSpotsDropdown().setDisable(false);
-                this.view.getAutoSelectButton().setDisable(false);
-                this.view.getNumDrawingDropdown().setDisable(false);
-                this.setGameActive(false); // Game is no longer active
-                this.model.resetGame();
-                this.resetGrid();
-            }
+                } else {
+                    // ----- LOOP IS FINISHED -----
+                    Alert overviewAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    overviewAlert.setTitle("Game Over");
+                    overviewAlert.setHeaderText("All draws complete!");
+                    overviewAlert.setContentText("Your final balance is: $" + this.model.user.getBalance() + "\n\nPlay again?");
+                    overviewAlert.showAndWait();
+                    // Re-enable *all* controls for a new game.
+                    System.out.println("Game is done, loop is done");
+                    this.view.getContinueButton().setDisable(false);
+                    this.view.getNumSpotsDropdown().setDisable(false);
+                    this.view.getAutoSelectButton().setDisable(false);
+                    this.view.getNumDrawingDropdown().setDisable(false);
+                    this.setGameActive(false); // Game is no longer active
+                    this.model.resetGame();
+                    this.resetGrid();
+                }
+            });
         });
+
         highlighter.play(); // Run the loop
     }
 
@@ -201,8 +214,9 @@ public class KenoController{
         }
     }
 
-    public void addWinnings(ArrayList<Integer> matches) {
+    public int addWinnings(ArrayList<Integer> matches) {
         Label playerBalance = this.view.getBalanceLabel();
+        Integer value = 0;
         if (matches == null){
             System.out.println("No Winnings");
         }else{
@@ -211,7 +225,7 @@ public class KenoController{
                 System.out.println(number);
 
             }
-            Integer value = 0;
+
             int numMatches = matches.size();
             switch(this.model.getUserNumSpots()){
 
@@ -255,7 +269,9 @@ public class KenoController{
             this.model.addMoney(value);
 
             playerBalance.setText("$" + this.model.user.getBalance());
+
         }
+        return value;
     }
 
     public void setGameActive(boolean b) {
