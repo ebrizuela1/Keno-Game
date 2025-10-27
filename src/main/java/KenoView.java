@@ -1,17 +1,15 @@
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class KenoView {
@@ -114,7 +112,7 @@ public class KenoView {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Keno Odds & Payouts");
             alert.setHeaderText("Payouts (Based on North Carolina State Lottery)");
-
+            VBox content = new VBox();
             String oddsText = "Payouts are based on a $1 wager.\n\n" +
                               "SPOT 1 (Match 1): $2\n\n" +
                               "SPOT 4 (Match 4): $75\n" +
@@ -132,8 +130,13 @@ public class KenoView {
                               "SPOT 10 (Match 6): $10\n" +
                               "SPOT 10 (Match 5): $2\n" +
                               "SPOT 10 (Match 0): $5";
-
-            alert.setContentText(oddsText);
+            Label label = new Label(oddsText);
+            label.setWrapText(true);
+            content.getChildren().addAll(label);
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(content);
+            scrollPane.setFitToWidth(true);
+            alert.getDialogPane().setContent(scrollPane);
             // Make the alert resizable
             alert.getDialogPane().setPrefSize(480, 400); 
             alert.setResizable(true);

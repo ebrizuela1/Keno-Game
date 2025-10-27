@@ -14,7 +14,7 @@ public class Player {
         this.selectedNumbers = new ArrayList<>();
         this.numDrawingsRemaining = 0;
         this.isGameActive = false;
-        this.balance = 200;
+        this.balance = 0;
     }
     Integer getNumDrawings(){
         return this.numDrawings;
