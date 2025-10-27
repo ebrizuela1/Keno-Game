@@ -62,7 +62,6 @@ public class KenoController{
         this.model.getUserList();
     }
 
-
     public void handleSubmit() {
         ArrayList<Integer> matches = this.model.submitKenoTicket();
         this.handleDisplayWinning(matches);
@@ -175,15 +174,6 @@ public class KenoController{
         });
 
         highlighter.play(); // Run the loop
-    }
-
-    private void resetGrid() {
-        Map<Integer, Button> map = this.view.getNumberButtons();
-        for(int i = 1 ; i < 81 ; i++){
-            Button resetButton = map.get(i);
-            resetButton.setStyle("-fx-background-radius: 10; -fx-background-color: #ff4b19; " +
-                    "-fx-pref-width: 40px; -fx-pref-height: 40px; -fx-text-fill: white;");
-        }
     }
 
     public void handleClearWinning() {

@@ -12,7 +12,7 @@ public class GameEngine {
     GameEngine(Player user){
         this.user = user;
         this.winningNumbers = new ArrayList<>();
-        }
+    }
     // Method will return the number of correct matches
     ArrayList<Integer> checkTicket(ArrayList<Integer> playerNumbers,
                      ArrayList<Integer> winningNumbers){
@@ -20,9 +20,8 @@ public class GameEngine {
 
         // Keep all the winning numbers that were also seen in playerNumbers
         commonNumbers.retainAll(playerNumbers);
-        ArrayList<Integer> winningMatches = new ArrayList<>(commonNumbers);
         // Returns the number of common numbers
-        return winningMatches;
+        return new ArrayList<>(commonNumbers);
     }
 
     ArrayList<Integer> submitKenoTicket(){
@@ -31,7 +30,7 @@ public class GameEngine {
         this.user.decNumDrawingsRemaining();
 
         // testing prints
-        if (winningMatches.size() != 0) {
+        if (!winningMatches.isEmpty()) {
             System.out.println("YOU WON: Matched" + winningMatches);
         } else {
             System.out.println("Loser");
@@ -43,7 +42,6 @@ public class GameEngine {
 
     // Generates and returns a winningNumbers array of size numSpots
     void setWinningNumbers(){
-        int numSpots = this.user.getNumSpots();
         ArrayList<Integer> winning = new ArrayList<>();
         Random randNum = new Random();
 
@@ -63,7 +61,7 @@ public class GameEngine {
         int numSpots = this.user.getNumSpots();
         ArrayList<Integer> winning = new ArrayList<>();
 
-        // Only run this if the user arlready set the numSpots
+        // Only run this if the user already set the numSpots
         if (numSpots > 0) {
             Random randNum = new Random();
 
@@ -142,8 +140,6 @@ public class GameEngine {
         this.user.setNumSpots(0);
         this.user.setNumDrawings(this.user.getNumDrawings());
     }
-
-
     public void addMoney(Integer value) {
         this.user.addToBalance(value);
     }

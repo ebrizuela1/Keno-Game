@@ -79,7 +79,4 @@ public final class AppStyles {
             NUMBER_BUTTON_BASE +
                     "-fx-background-color: #28a745; " +
                     "-fx-border-color: #155724;";
-
-    public static final String PLAYERSTYLE = "-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: white;";
-    public static final String BALANCESTYLE = "-fx-font-size: 18px; -fx-text-fill: white;";
 }

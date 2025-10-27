@@ -39,7 +39,6 @@ public class KenoView {
     Label getBalanceLabel(){
         return this.balanceLabel;
     }
-
     // Builds the welcome scene Keno, Menu
     Scene buildWelcomeScene(){
         // Initialize the root of scene
@@ -337,9 +336,6 @@ public class KenoView {
         numDrawingDropdown.setDisable(false);
         autoSelect.setDisable(false);
         continueButton.setDisable(false);
-
-        numSpotsDropdown.setValue(null);
-        numDrawingDropdown.setValue(null);
 
         balanceLabel.setText("$" + controller.getBalance());
     }
