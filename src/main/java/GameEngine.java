@@ -25,6 +25,9 @@ public class GameEngine {
     }
 
     ArrayList<Integer> submitKenoTicket(){
+        if(this.user.getNumDrawingsRemaining() <= 0){
+            return new ArrayList<>();
+        }
         this.setWinningNumbers();
         ArrayList<Integer> winningMatches = this.checkTicket(this.user.getSelectedNumbers(), this.winningNumbers);
         this.user.decNumDrawingsRemaining();

@@ -22,7 +22,6 @@ class GameEngineTest {
         gameEngine = new GameEngine(player);
     }
 
-
     @Test
     void testCheckTicketNoMatches() {
         ArrayList<Integer> playerNums = new ArrayList<>(Arrays.asList(1, 2, 3));
@@ -51,11 +50,9 @@ class GameEngineTest {
 
 
     @Test
-    void testSetWinningNumbers() {
+    void testSetWinningNumbersInRange() {
         gameEngine.setWinningNumbers();
         ArrayList<Integer> winners = gameEngine.getWinningNumbers();
-        assertNotNull(winners, "Winning numbers list should not be null");
-        assertEquals(20, winners.size(), "Should generate exactly 20 winning numbers");
 
         gameEngine.setWinningNumbers();
         winners = gameEngine.getWinningNumbers();
@@ -63,6 +60,20 @@ class GameEngineTest {
         for (int num : winners) {
             assertTrue(num >= 1 && num <= 80, "Winning number " + num + " is not in range 1-80");
         }
+    }
+
+    @Test
+    void testSetWinningNumbersNull() {
+        gameEngine.setWinningNumbers();
+        ArrayList<Integer> winners = gameEngine.getWinningNumbers();
+        assertNotNull(winners, "Winning numbers list should not be null");
+    }
+
+    @Test
+    void testSetWinningNumbersNum() {
+        gameEngine.setWinningNumbers();
+        ArrayList<Integer> winners = gameEngine.getWinningNumbers();
+        assertEquals(20, winners.size(), "Should generate exactly 20 winning numbers");
     }
 
     @Test
@@ -78,14 +89,31 @@ class GameEngineTest {
         player.setNumSpots(8);
         ArrayList<Integer> randomNums = gameEngine.getRandomNumbers();
         assertEquals(8, randomNums.size(), "Should return 8 random numbers for 8 spots");
-
+    }
+    @Test
+    void testGetRandomNumbersZeroSpots(){
         player.setNumSpots(0);
-        randomNums = gameEngine.getRandomNumbers();
+        ArrayList<Integer> randomNums = gameEngine.getRandomNumbers();
         assertTrue(randomNums.isEmpty(), "Should return an empty list if numSpots is 0");
     }
 
     @Test
-    void testSubmitKenoTicke() {
+    void testGetRandomNumbersNegativeSpots(){
+        player.setNumSpots(-1);
+        ArrayList<Integer> randomNums = gameEngine.getRandomNumbers();
+        assertTrue(randomNums.isEmpty(), "Should return an empty list if numSpots is 0");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,2,4,8,10,80})
+    void testGetRandomNumbersUnique(int numSpots){
+        player.setNumSpots(numSpots);
+        ArrayList<Integer> randomNums = gameEngine.getRandomNumbers();
+        assertEquals(numSpots, (new HashSet<>(randomNums)).size(), "Should return " + numSpots + " unique random numbers");
+    }
+
+    @Test
+    void testSubmitKenoTicket() {
         // makes sure it calls dec num drawings or keeps track correctly
         player.setNumDrawings(4);
         assertEquals(4, player.getNumDrawingsRemaining(), "Should start with 4 drawings");
@@ -93,6 +121,19 @@ class GameEngineTest {
         gameEngine.submitKenoTicket();
         assertEquals(3, player.getNumDrawingsRemaining(), "Should have 3 drawings remaining after submit");
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0, 6, 10})
+    void testSetNumDrawingsRemaining(int numDrawings) {
+        int ans = Math.max(0, numDrawings);
+        player.setNumDrawings(numDrawings);
+        assertEquals(ans, player.getNumDrawingsRemaining(), "Should start with " + ans + " drawings");
+
+        gameEngine.submitKenoTicket();
+        assertEquals(Math.max(0,ans - 1), player.getNumDrawingsRemaining(), "Should have " + Math.max(0,ans - 1) + " drawings remaining after submit");
+    }
+
+
 
     @Test
     void testResetGame() {
@@ -107,5 +148,17 @@ class GameEngineTest {
         assertTrue(player.getSelectedNumbers().isEmpty(), "Player selections should be cleared");
         assertFalse(player.isGameActive(), "GameActive flag should be reset to false");
         assertEquals(4, player.getNumDrawingsRemaining(), "Drawings remaining should reset to total drawings");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,2,4,8,10})
+    void testSetUserNumsZeroSpots(int numSpots){
+        player.setNumSpots(numSpots);
+        ArrayList<Integer> setUserNumsReturn = this.gameEngine.setUserNums();
+        ArrayList<Integer> userNums = this.gameEngine.getUserList();
+        int n = Math.min(setUserNumsReturn.size(), userNums.size());
+        for (int i = 0; i < n; i++) {
+            assertEquals(setUserNumsReturn.get(i), userNums.get(i), "UserNums should be set/equal");
+        }
     }
 }

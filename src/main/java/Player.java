@@ -20,6 +20,11 @@ public class Player {
         return this.numDrawings;
     }
     void setNumDrawings(int newNum){
+        if(newNum <= 0){
+            this.numDrawings = 0;
+            this.numDrawingsRemaining = 0;
+            return;
+        }
         this.numDrawings = newNum;
         this.numDrawingsRemaining = newNum;
     }
@@ -30,6 +35,10 @@ public class Player {
         return this.numSpots;
     }
     void setNumSpots(int newNum){
+        if(newNum <= 0){
+            this.numSpots = 0;
+            return;
+        }
         this.numSpots = newNum;
     }
     // Array getter : returns copy
@@ -45,6 +54,9 @@ public class Player {
     }
 
     Integer getNumDrawingsRemaining(){
+        if(this.numDrawingsRemaining <= 0){
+            return 0;
+        }
         return this.numDrawingsRemaining;
     }
     void decNumDrawingsRemaining(){

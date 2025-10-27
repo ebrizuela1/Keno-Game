@@ -67,14 +67,21 @@ public final class AppStyles {
      */
     public static final String NUMBER_BUTTON_SELECTED =
             NUMBER_BUTTON_BASE +
-                    "-fx-background-color: #007bff; -fx-border-color: #0056b3;";
+                    "-fx-background-color: #007bff;" +
+                    "-fx-border-color: #0056b3;";
 
+    /**
+     * System selected
+     * */
     public static final String NUMBER_BUTTON_WIN =
             NUMBER_BUTTON_BASE +
                     "-fx-background-color: #ffc107; " +
                     "-fx-text-fill: black; " +
                     "-fx-border-color: #e0a800;";
 
+    /**
+     * User AND System selected
+     * */
     public static final String NUMBER_BUTTON_MATCH =
             NUMBER_BUTTON_BASE +
                     "-fx-background-color: #28a745; " +
