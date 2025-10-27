@@ -87,6 +87,57 @@ public class KenoView {
         Button exit = new Button("Exit");
         menuOptions.getChildren().addAll(rules, odds, exit);
 
+        rules.setOnAction(event -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Rules of Keno");
+            alert.setHeaderText("How to Play Keno");
+            
+            String rulesText = "1. Choose how many spots (numbers) you want to play: 1, 4, 8, or 10.\n" +
+                               "2. Choose how many drawings you want to play: 1 to 4.\n" +
+                               "3. Select your numbers from the grid (1-80). You must select the exact amount of spots you chose.\n" +
+                               "4. You can also use 'Auto Select' to have the game pick numbers for you.\n" +
+                               "5. Press 'Continue' to start the draw. The game will randomly draw 20 numbers.\n" +
+                               "6. You win by matching your numbers to the 20 numbers drawn by the game.";
+            
+            alert.setContentText(rulesText);
+            
+            alert.getDialogPane().setPrefSize(480, 320);
+            alert.setResizable(true); 
+            
+            alert.showAndWait();
+        });
+
+        odds.setOnAction(event -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Keno Odds & Payouts");
+            alert.setHeaderText("Payouts (Based on North Carolina State Lottery)");
+
+            String oddsText = "Payouts are based on a $1 wager.\n\n" +
+                              "SPOT 1 (Match 1): $2\n\n" +
+                              "SPOT 4 (Match 4): $75\n" +
+                              "SPOT 4 (Match 3): $5\n" +
+                              "SPOT 4 (Match 2): $1\n\n" +
+                              "SPOT 8 (Match 8): $10,000\n" +
+                              "SPOT 8 (Match 7): $450\n" +
+                              "SPOT 8 (Match 6): $50\n" +
+                              "SPOT 8 (Match 5): $12\n" +
+                              "SPOT 8 (Match 4): $2\n\n" +
+                              "SPOT 10 (Match 10): $100,000\n" +
+                              "SPOT 10 (Match 9): $2,500\n" +
+                              "SPOT 10 (Match 8): $250\n" +
+                              "SPOT 10 (Match 7): $40\n" +
+                              "SPOT 10 (Match 6): $10\n" +
+                              "SPOT 10 (Match 5): $2\n" +
+                              "SPOT 10 (Match 0): $5";
+
+            alert.setContentText(oddsText);
+            // Make the alert resizable
+            alert.getDialogPane().setPrefSize(480, 400); 
+            alert.setResizable(true);
+            
+            alert.showAndWait();
+        });
+
         // === Button Event Handlers
         exit.setOnAction(event -> {
             this.controller.handleWelcomeScene();
