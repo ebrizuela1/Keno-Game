@@ -78,8 +78,7 @@ public final class AppStyles {
     public static final String NUMBER_BUTTON_MATCH =
             NUMBER_BUTTON_BASE +
                     "-fx-background-color: #28a745; " +
-                    "-fx-border-color: #1e7e34; " +
-                    "-fx-effect: dropshadow(gaussian, #28a745, 20, 0.9, 0, 0);";
+                    "-fx-border-color: #155724;";
 
     public static final String PLAYERSTYLE = "-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: white;";
     public static final String BALANCESTYLE = "-fx-font-size: 18px; -fx-text-fill: white;";

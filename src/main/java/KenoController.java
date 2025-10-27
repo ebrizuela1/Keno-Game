@@ -144,14 +144,15 @@ public class KenoController{
                 int value = this.addWinnings(matches);
 
                 // 2. Count down the drawing
-                this.model.user.decNumDrawingsRemaining();
+//                this.model.user.decNumDrawingsRemaining();
                 System.out.println("Number of Drawings left: " + this.model.getDrawingsRemaining());
 
                 if (this.model.getDrawingsRemaining() > 0) {
                     // ----- MORE DRAWINGS LEFT -----
                     Alert drawAlert = new Alert(Alert.AlertType.INFORMATION);
                     drawAlert.setTitle("Draw Results");
-                    drawAlert.setHeaderText("Winnings this round: $" + value);
+//                    drawAlert.setHeaderText("Winnings this round: $" + value);
+                    drawAlert.setHeaderText("You won $" + value + " this round!");
                     drawAlert.setContentText("Your new balance is: $" + this.model.user.getBalance());
                     drawAlert.showAndWait();
                     this.view.getContinueButton().setDisable(false);
@@ -161,7 +162,8 @@ public class KenoController{
                     Alert overviewAlert = new Alert(Alert.AlertType.CONFIRMATION);
                     overviewAlert.setTitle("Game Over");
                     overviewAlert.setHeaderText("All draws complete!");
-                    overviewAlert.setContentText("Your final balance is: $" + this.model.user.getBalance() + "\n\nPlay again?");
+                    overviewAlert.setContentText("Winnings this round: $" + value +
+                            "\nYour final balance is: $" + this.model.user.getBalance() + "\n\nPlay again?");
                     overviewAlert.showAndWait();
                     // Re-enable *all* controls for a new game.
                     System.out.println("Game is done, loop is done");

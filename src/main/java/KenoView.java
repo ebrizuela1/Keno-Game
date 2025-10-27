@@ -196,7 +196,6 @@ public class KenoView {
                     numSpotsDropdown.setDisable(true);
                     numDrawingDropdown.setDisable(true);
                     this.autoSelect.setDisable(true);
-                    grid.setDisable(true);
 
                     this.controller.handleSubmit();
                 } else {
